@@ -4,16 +4,20 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Checks the user-visible behaviour of the CHOO command-line interface.
+ * Checks the user-visible behavior of the CHOO command-line interface.
  */
 public class CHOOTest {
     /**
-     * Runs a complete interaction and checks that tasks can be marked and unmarked.
+     * Runs a complete interaction with all Level 4 task types.
      *
      * @param args command-line arguments; not used
      */
     public static void main(String[] args) {
-        String input = "read book\nreturn book\nmark 2\nlist\nunmark 2\nlist\nbye\n";
+        String input = "todo borrow book\n"
+                + "deadline return book /by Sunday\n"
+                + "deadline do homework /by no idea :-p\n"
+                + "event project meeting /from Mon 2pm /to 4pm\n"
+                + "mark 2\nlist\nbye\n";
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream originalOutput = System.out;
 
@@ -27,12 +31,13 @@ public class CHOOTest {
         }
 
         String actualOutput = output.toString(StandardCharsets.UTF_8);
-        assertContains(actualOutput, "added: read book");
-        assertContains(actualOutput, "added: return book");
+        assertContains(actualOutput, "[T][ ] borrow book");
+        assertContains(actualOutput, "[D][ ] return book (by: Sunday)");
+        assertContains(actualOutput, "[D][ ] do homework (by: no idea :-p)");
+        assertContains(actualOutput, "[E][ ] project meeting (from: Mon 2pm to: 4pm)");
+        assertContains(actualOutput, "Now you have 4 tasks in the list.");
         assertContains(actualOutput, "Nice! I've marked this task as done:");
-        assertContains(actualOutput, "2.[X] return book");
-        assertContains(actualOutput, "OK, I've marked this task as not done yet:");
-        assertContains(actualOutput, "2.[ ] return book");
+        assertContains(actualOutput, "2.[D][X] return book (by: Sunday)");
         assertContains(actualOutput, "Bye. Hope to see you again soon!");
     }
 

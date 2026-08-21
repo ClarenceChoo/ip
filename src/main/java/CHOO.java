@@ -36,6 +36,7 @@ public class CHOO {
             }
 
             if (command.equals("list")) {
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < tasks.size(); i++) {
                     System.out.println((i + 1) + "." + tasks.get(i));
                 }
@@ -63,9 +64,45 @@ public class CHOO {
                 continue;
             }
 
-            tasks.add(new Task(command));
-            System.out.println("added: " + command);
-            System.out.println(separator);
+            if (command.startsWith("todo ")) {
+                Task task = new Task(command.substring(5));
+                addTask(tasks, task, separator);
+                continue;
+            }
+
+            if (command.startsWith("deadline ")) {
+                String taskDetails = command.substring(9);
+                int byIndex = taskDetails.indexOf(" /by ");
+                String description = taskDetails.substring(0, byIndex);
+                String by = taskDetails.substring(byIndex + 5);
+                Task task = new Task("D", description, " (by: " + by + ")");
+                addTask(tasks, task, separator);
+                continue;
+            }
+
+            if (command.startsWith("event ")) {
+                String taskDetails = command.substring(6);
+                int fromIndex = taskDetails.indexOf(" /from ");
+                int toIndex = taskDetails.indexOf(" /to ", fromIndex + 7);
+                String description = taskDetails.substring(0, fromIndex);
+                String from = taskDetails.substring(fromIndex + 7, toIndex);
+                String to = taskDetails.substring(toIndex + 5);
+                Task task = new Task("E", description,
+                        " (from: " + from + " to: " + to + ")");
+                addTask(tasks, task, separator);
+                continue;
+            }
+
+            Task task = new Task(command);
+            addTask(tasks, task, separator);
         }
+    }
+
+    private static void addTask(ArrayList<Task> tasks, Task task, String separator) {
+        tasks.add(task);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println(separator);
     }
 }
