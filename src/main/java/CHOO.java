@@ -29,72 +29,144 @@ public class CHOO {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
-            if (command.equals("bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                System.out.println(separator);
-                break;
-            }
-
-            if (command.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println((i + 1) + "." + tasks.get(i));
+            try {
+                if (executeCommand(command, tasks, separator)) {
+                    break;
                 }
+            } catch (IllegalArgumentException exception) {
+                System.out.println("OOPS!!! " + exception.getMessage());
                 System.out.println(separator);
-                continue;
             }
-
-            if (command.startsWith("mark ")) {
-                int taskNumber = Integer.parseInt(command.substring(5));
-                Task task = tasks.get(taskNumber - 1);
-                task.markAsDone();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  " + task);
-                System.out.println(separator);
-                continue;
-            }
-
-            if (command.startsWith("unmark ")) {
-                int taskNumber = Integer.parseInt(command.substring(7));
-                Task task = tasks.get(taskNumber - 1);
-                task.markAsNotDone();
-                System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  " + task);
-                System.out.println(separator);
-                continue;
-            }
-
-            if (command.startsWith("todo ")) {
-                Task task = new Todo(command.substring(5));
-                addTask(tasks, task, separator);
-                continue;
-            }
-
-            if (command.startsWith("deadline ")) {
-                String taskDetails = command.substring(9);
-                int byIndex = taskDetails.indexOf(" /by ");
-                String description = taskDetails.substring(0, byIndex);
-                String by = taskDetails.substring(byIndex + 5);
-                Task task = new Deadline(description, by);
-                addTask(tasks, task, separator);
-                continue;
-            }
-
-            if (command.startsWith("event ")) {
-                String taskDetails = command.substring(6);
-                int fromIndex = taskDetails.indexOf(" /from ");
-                int toIndex = taskDetails.indexOf(" /to ", fromIndex + 7);
-                String description = taskDetails.substring(0, fromIndex);
-                String from = taskDetails.substring(fromIndex + 7, toIndex);
-                String to = taskDetails.substring(toIndex + 5);
-                Task task = new Event(description, from, to);
-                addTask(tasks, task, separator);
-                continue;
-            }
-
-            Task task = new Todo(command);
-            addTask(tasks, task, separator);
         }
+    }
+
+    private static boolean executeCommand(String command, ArrayList<Task> tasks,
+                                          String separator) {
+        String trimmedCommand = command.trim();
+        if (trimmedCommand.equals("bye")) {
+            System.out.println("Bye. Hope to see you again soon!");
+            System.out.println(separator);
+            return true;
+        }
+
+        if (trimmedCommand.equals("list")) {
+            System.out.println("Here are the tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+            System.out.println(separator);
+            return false;
+        }
+
+        if (trimmedCommand.equals("mark") || trimmedCommand.startsWith("mark ")) {
+            updateTaskStatus(trimmedCommand, "mark", tasks, separator, true);
+            return false;
+        }
+
+        if (trimmedCommand.equals("unmark") || trimmedCommand.startsWith("unmark ")) {
+            updateTaskStatus(trimmedCommand, "unmark", tasks, separator, false);
+            return false;
+        }
+
+        if (trimmedCommand.equals("todo") || trimmedCommand.startsWith("todo ")) {
+            addTodo(trimmedCommand, tasks, separator);
+            return false;
+        }
+
+        if (trimmedCommand.equals("deadline") || trimmedCommand.startsWith("deadline ")) {
+            addDeadline(trimmedCommand, tasks, separator);
+            return false;
+        }
+
+        if (trimmedCommand.equals("event") || trimmedCommand.startsWith("event ")) {
+            addEvent(trimmedCommand, tasks, separator);
+            return false;
+        }
+
+        throw new IllegalArgumentException("I don't recognize that command.");
+    }
+
+    private static void updateTaskStatus(String command, String keyword,
+                                         ArrayList<Task> tasks, String separator,
+                                         boolean isMarking) {
+        String taskNumberText = command.substring(keyword.length()).trim();
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(taskNumberText);
+        } catch (NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                    "Enter a whole-number task position after " + keyword + ".");
+        }
+
+        if (taskNumber < 1 || taskNumber > tasks.size()) {
+            throw new IllegalArgumentException(
+                    "Task number " + taskNumber + " is outside the list.");
+        }
+
+        Task task = tasks.get(taskNumber - 1);
+        if (isMarking) {
+            task.markAsDone();
+            System.out.println("Nice! I've marked this task as done:");
+        } else {
+            task.markAsNotDone();
+            System.out.println("OK, I've marked this task as not done yet:");
+        }
+        System.out.println("  " + task);
+        System.out.println(separator);
+    }
+
+    private static void addTodo(String command, ArrayList<Task> tasks, String separator) {
+        String description = command.substring("todo".length()).trim();
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("A todo needs a description.");
+        }
+        addTask(tasks, new Todo(description), separator);
+    }
+
+    private static void addDeadline(String command, ArrayList<Task> tasks, String separator) {
+        String taskDetails = command.substring("deadline".length()).trim();
+        if (taskDetails.isEmpty()) {
+            throw new IllegalArgumentException("A deadline needs a description.");
+        }
+
+        int byIndex = taskDetails.indexOf("/by");
+        if (byIndex < 0) {
+            throw new IllegalArgumentException("A deadline needs a /by date or time.");
+        }
+
+        String description = taskDetails.substring(0, byIndex).trim();
+        String by = taskDetails.substring(byIndex + 3).trim();
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("A deadline needs a description.");
+        }
+        if (by.isEmpty()) {
+            throw new IllegalArgumentException("A deadline needs a /by date or time.");
+        }
+        addTask(tasks, new Deadline(description, by), separator);
+    }
+
+    private static void addEvent(String command, ArrayList<Task> tasks, String separator) {
+        String taskDetails = command.substring("event".length()).trim();
+        if (taskDetails.isEmpty()) {
+            throw new IllegalArgumentException("An event needs a description.");
+        }
+
+        int fromIndex = taskDetails.indexOf("/from");
+        int toIndex = taskDetails.indexOf("/to");
+        if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
+            throw new IllegalArgumentException("An event needs both /from and /to values.");
+        }
+
+        String description = taskDetails.substring(0, fromIndex).trim();
+        String from = taskDetails.substring(fromIndex + 5, toIndex).trim();
+        String to = taskDetails.substring(toIndex + 3).trim();
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("An event needs a description.");
+        }
+        if (from.isEmpty() || to.isEmpty()) {
+            throw new IllegalArgumentException("An event needs both /from and /to values.");
+        }
+        addTask(tasks, new Event(description, from, to), separator);
     }
 
     private static void addTask(ArrayList<Task> tasks, Task task, String separator) {

@@ -8,16 +8,15 @@ import java.nio.charset.StandardCharsets;
  */
 public class CHOOTest {
     /**
-     * Runs a complete interaction with all Level 4 task types.
+     * Runs an interaction that mixes invalid commands with a valid task.
      *
      * @param args command-line arguments; not used
      */
     public static void main(String[] args) {
-        String input = "todo borrow book\n"
-                + "deadline return book /by Sunday\n"
-                + "deadline do homework /by no idea :-p\n"
-                + "event project meeting /from Mon 2pm /to 4pm\n"
-                + "mark 2\nlist\nbye\n";
+        String input = "todo\n"
+                + "mystery command\n"
+                + "todo keep this\n"
+                + "list\nbye\n";
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream originalOutput = System.out;
 
@@ -31,13 +30,10 @@ public class CHOOTest {
         }
 
         String actualOutput = output.toString(StandardCharsets.UTF_8);
-        assertContains(actualOutput, "[T][ ] borrow book");
-        assertContains(actualOutput, "[D][ ] return book (by: Sunday)");
-        assertContains(actualOutput, "[D][ ] do homework (by: no idea :-p)");
-        assertContains(actualOutput, "[E][ ] project meeting (from: Mon 2pm to: 4pm)");
-        assertContains(actualOutput, "Now you have 4 tasks in the list.");
-        assertContains(actualOutput, "Nice! I've marked this task as done:");
-        assertContains(actualOutput, "2.[D][X] return book (by: Sunday)");
+        assertContains(actualOutput, "OOPS!!! A todo needs a description.");
+        assertContains(actualOutput, "OOPS!!! I don't recognize that command.");
+        assertContains(actualOutput, "1.[T][ ] keep this");
+        assertDoesNotContain(actualOutput, "[T][ ] mystery command");
         assertContains(actualOutput, "Bye. Hope to see you again soon!");
     }
 
@@ -50,6 +46,13 @@ public class CHOOTest {
     private static void assertContains(String actual, String expected) {
         if (!actual.contains(expected)) {
             throw new AssertionError("Expected output to contain: " + expected
+                    + System.lineSeparator() + "Actual output:" + System.lineSeparator() + actual);
+        }
+    }
+
+    private static void assertDoesNotContain(String actual, String unexpected) {
+        if (actual.contains(unexpected)) {
+            throw new AssertionError("Expected output not to contain: " + unexpected
                     + System.lineSeparator() + "Actual output:" + System.lineSeparator() + actual);
         }
     }

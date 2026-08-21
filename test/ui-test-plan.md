@@ -57,3 +57,131 @@ ____________________________________________________________
 Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+## Test case: Invalid task details preserve valid state
+
+Aim: Verify descriptions and schedule delimiters are validated while successful tasks remain unchanged.
+
+Input:
+```text
+todo
+mystery command
+todo keep this
+deadline report
+deadline /by Friday
+deadline report /by
+deadline report /by Friday
+event /from Monday /to Tuesday
+event meeting /from Monday
+event meeting /to Tuesday
+event meeting /from Monday /to
+event meeting /from Monday /to Tuesday
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+OOPS!!! A todo needs a description.
+____________________________________________________________
+OOPS!!! I don't recognize that command.
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] keep this
+Now you have 1 tasks in the list.
+____________________________________________________________
+OOPS!!! A deadline needs a /by date or time.
+____________________________________________________________
+OOPS!!! A deadline needs a description.
+____________________________________________________________
+OOPS!!! A deadline needs a /by date or time.
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] report (by: Friday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+OOPS!!! An event needs a description.
+____________________________________________________________
+OOPS!!! An event needs both /from and /to values.
+____________________________________________________________
+OOPS!!! An event needs both /from and /to values.
+____________________________________________________________
+OOPS!!! An event needs both /from and /to values.
+____________________________________________________________
+Got it. I've added this task:
+  [E][ ] meeting (from: Monday to: Tuesday)
+Now you have 3 tasks in the list.
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] keep this
+2.[D][ ] report (by: Friday)
+3.[E][ ] meeting (from: Monday to: Tuesday)
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test case: Invalid task numbers preserve completion state
+
+Aim: Verify missing, non-numeric, and out-of-range positions are rejected without changing task status.
+
+Input:
+```text
+todo first
+mark
+mark two
+mark 2
+mark 1
+unmark
+unmark 0
+unmark 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] first
+Now you have 1 tasks in the list.
+____________________________________________________________
+OOPS!!! Enter a whole-number task position after mark.
+____________________________________________________________
+OOPS!!! Enter a whole-number task position after mark.
+____________________________________________________________
+OOPS!!! Task number 2 is outside the list.
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] first
+____________________________________________________________
+OOPS!!! Enter a whole-number task position after unmark.
+____________________________________________________________
+OOPS!!! Task number 0 is outside the list.
+____________________________________________________________
+OK, I've marked this task as not done yet:
+  [T][ ] first
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] first
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
