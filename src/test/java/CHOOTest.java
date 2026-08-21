@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CHOOTest {
     /**
-     * Runs an interaction that mixes invalid commands with a valid task.
+     * Runs an interaction that mixes invalid commands, typed tasks, and deletion.
      *
      * @param args command-line arguments; not used
      */
@@ -16,6 +16,9 @@ public class CHOOTest {
         String input = "todo\n"
                 + "mystery command\n"
                 + "todo keep this\n"
+                + "deadline remove this /by Friday\n"
+                + "event keep event /from Monday /to Tuesday\n"
+                + "delete 2\n"
                 + "list\nbye\n";
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream originalOutput = System.out;
@@ -32,7 +35,13 @@ public class CHOOTest {
         String actualOutput = output.toString(StandardCharsets.UTF_8);
         assertContains(actualOutput, "OOPS!!! A todo needs a description.");
         assertContains(actualOutput, "OOPS!!! I don't recognize that command.");
-        assertContains(actualOutput, "1.[T][ ] keep this");
+        assertContains(actualOutput, "Noted. I've removed this task:");
+        assertContains(actualOutput, "[D][ ] remove this (by: Friday)");
+        assertContains(actualOutput, "Now you have 2 tasks in the list.");
+        assertContains(actualOutput, "Here are the tasks in your list:\n"
+                + "1.[T][ ] keep this\n"
+                + "2.[E][ ] keep event (from: Monday to: Tuesday)\n"
+                + "____________________________________________________________");
         assertDoesNotContain(actualOutput, "[T][ ] mystery command");
         assertContains(actualOutput, "Bye. Hope to see you again soon!");
     }

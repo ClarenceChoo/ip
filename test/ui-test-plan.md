@@ -58,6 +58,79 @@ Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
 
+## Test case: Delete tasks and reject invalid positions
+
+Aim: Verify deletion removes the selected task, renumbers the list, and leaves state unchanged after invalid positions.
+
+Input:
+```text
+todo first
+deadline second /by Friday
+event third /from Monday /to Tuesday
+delete
+delete two
+delete 0
+delete -1
+delete 4
+delete 2
+list
+delete 1
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] first
+Now you have 1 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] second (by: Friday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [E][ ] third (from: Monday to: Tuesday)
+Now you have 3 tasks in the list.
+____________________________________________________________
+OOPS!!! Enter a whole-number task position after delete.
+____________________________________________________________
+OOPS!!! Enter a whole-number task position after delete.
+____________________________________________________________
+OOPS!!! Task number 0 is outside the list.
+____________________________________________________________
+OOPS!!! Task number -1 is outside the list.
+____________________________________________________________
+OOPS!!! Task number 4 is outside the list.
+____________________________________________________________
+Noted. I've removed this task:
+  [D][ ] second (by: Friday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] first
+2.[E][ ] third (from: Monday to: Tuesday)
+____________________________________________________________
+Noted. I've removed this task:
+  [T][ ] first
+Now you have 1 tasks in the list.
+____________________________________________________________
+Here are the tasks in your list:
+1.[E][ ] third (from: Monday to: Tuesday)
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ## Test case: Invalid task details preserve valid state
 
 Aim: Verify descriptions and schedule delimiters are validated while successful tasks remain unchanged.

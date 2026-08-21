@@ -68,6 +68,11 @@ public class CHOO {
             return false;
         }
 
+        if (trimmedCommand.equals("delete") || trimmedCommand.startsWith("delete ")) {
+            deleteTask(trimmedCommand, tasks, separator);
+            return false;
+        }
+
         if (trimmedCommand.equals("todo") || trimmedCommand.startsWith("todo ")) {
             addTodo(trimmedCommand, tasks, separator);
             return false;
@@ -89,6 +94,31 @@ public class CHOO {
     private static void updateTaskStatus(String command, String keyword,
                                          ArrayList<Task> tasks, String separator,
                                          boolean isMarking) throws ChooException {
+        int taskNumber = getTaskNumber(command, keyword, tasks);
+        Task task = tasks.get(taskNumber - 1);
+        if (isMarking) {
+            task.markAsDone();
+            System.out.println("Nice! I've marked this task as done:");
+        } else {
+            task.markAsNotDone();
+            System.out.println("OK, I've marked this task as not done yet:");
+        }
+        System.out.println("  " + task);
+        System.out.println(separator);
+    }
+
+    private static void deleteTask(String command, ArrayList<Task> tasks,
+                                   String separator) throws ChooException {
+        int taskNumber = getTaskNumber(command, "delete", tasks);
+        Task removedTask = tasks.remove(taskNumber - 1);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + removedTask);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println(separator);
+    }
+
+    private static int getTaskNumber(String command, String keyword,
+                                     ArrayList<Task> tasks) throws ChooException {
         String taskNumberText = command.substring(keyword.length()).trim();
         int taskNumber;
         try {
@@ -102,17 +132,7 @@ public class CHOO {
             throw new ChooException(
                     "Task number " + taskNumber + " is outside the list.");
         }
-
-        Task task = tasks.get(taskNumber - 1);
-        if (isMarking) {
-            task.markAsDone();
-            System.out.println("Nice! I've marked this task as done:");
-        } else {
-            task.markAsNotDone();
-            System.out.println("OK, I've marked this task as not done yet:");
-        }
-        System.out.println("  " + task);
-        System.out.println(separator);
+        return taskNumber;
     }
 
     private static void addTodo(String command, ArrayList<Task> tasks,
