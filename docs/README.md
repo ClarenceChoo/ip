@@ -1,30 +1,37 @@
 # CHOO User Guide
 
-// Update the title above to match the actual product name
+CHOO is a command-line chatbot that keeps track of your tasks.
 
 // Product screenshot goes here
 
-// Product intro goes here
+Enter one command at a time and press Enter. Enter `bye` when you want to exit.
 
-## Adding deadlines
+## Adding a task
 
-// Describe the action and its outcome.
+Enter the task description to add it to the list.
 
-// Give examples of usage
+Example: `read book`
 
-Example: `keyword (optional arguments)`
+## Listing tasks
 
-// A description of the expected outcome goes here
+Enter `list` to display all tasks. An `[X]` means that a task is done, while
+`[ ]` means that it is not done.
 
+Example output:
+
+```text
+1.[ ] read book
+2.[X] return book
 ```
-expected output
-```
 
-## Feature ABC
+## Marking a task as done
 
-// Feature details
+Enter `mark NUMBER`, where `NUMBER` is the task number shown by `list`.
 
+Example: `mark 2`
 
-## Feature XYZ
+## Marking a task as not done
 
-// Feature details
+Enter `unmark NUMBER`, where `NUMBER` is the task number shown by `list`.
+
+Example: `unmark 2`
