@@ -33,7 +33,7 @@ public class CHOO {
                 if (executeCommand(command, tasks, separator)) {
                     break;
                 }
-            } catch (IllegalArgumentException exception) {
+            } catch (ChooException exception) {
                 System.out.println("OOPS!!! " + exception.getMessage());
                 System.out.println(separator);
             }
@@ -41,7 +41,7 @@ public class CHOO {
     }
 
     private static boolean executeCommand(String command, ArrayList<Task> tasks,
-                                          String separator) {
+                                          String separator) throws ChooException {
         String trimmedCommand = command.trim();
         if (trimmedCommand.equals("bye")) {
             System.out.println("Bye. Hope to see you again soon!");
@@ -83,23 +83,23 @@ public class CHOO {
             return false;
         }
 
-        throw new IllegalArgumentException("I don't recognize that command.");
+        throw new ChooException("I don't recognize that command.");
     }
 
     private static void updateTaskStatus(String command, String keyword,
                                          ArrayList<Task> tasks, String separator,
-                                         boolean isMarking) {
+                                         boolean isMarking) throws ChooException {
         String taskNumberText = command.substring(keyword.length()).trim();
         int taskNumber;
         try {
             taskNumber = Integer.parseInt(taskNumberText);
         } catch (NumberFormatException exception) {
-            throw new IllegalArgumentException(
+            throw new ChooException(
                     "Enter a whole-number task position after " + keyword + ".");
         }
 
         if (taskNumber < 1 || taskNumber > tasks.size()) {
-            throw new IllegalArgumentException(
+            throw new ChooException(
                     "Task number " + taskNumber + " is outside the list.");
         }
 
@@ -115,56 +115,59 @@ public class CHOO {
         System.out.println(separator);
     }
 
-    private static void addTodo(String command, ArrayList<Task> tasks, String separator) {
+    private static void addTodo(String command, ArrayList<Task> tasks,
+                                String separator) throws ChooException {
         String description = command.substring("todo".length()).trim();
         if (description.isEmpty()) {
-            throw new IllegalArgumentException("A todo needs a description.");
+            throw new ChooException("A todo needs a description.");
         }
         addTask(tasks, new Todo(description), separator);
     }
 
-    private static void addDeadline(String command, ArrayList<Task> tasks, String separator) {
+    private static void addDeadline(String command, ArrayList<Task> tasks,
+                                    String separator) throws ChooException {
         String taskDetails = command.substring("deadline".length()).trim();
         if (taskDetails.isEmpty()) {
-            throw new IllegalArgumentException("A deadline needs a description.");
+            throw new ChooException("A deadline needs a description.");
         }
 
         int byIndex = taskDetails.indexOf("/by");
         if (byIndex < 0) {
-            throw new IllegalArgumentException("A deadline needs a /by date or time.");
+            throw new ChooException("A deadline needs a /by date or time.");
         }
 
         String description = taskDetails.substring(0, byIndex).trim();
         String by = taskDetails.substring(byIndex + 3).trim();
         if (description.isEmpty()) {
-            throw new IllegalArgumentException("A deadline needs a description.");
+            throw new ChooException("A deadline needs a description.");
         }
         if (by.isEmpty()) {
-            throw new IllegalArgumentException("A deadline needs a /by date or time.");
+            throw new ChooException("A deadline needs a /by date or time.");
         }
         addTask(tasks, new Deadline(description, by), separator);
     }
 
-    private static void addEvent(String command, ArrayList<Task> tasks, String separator) {
+    private static void addEvent(String command, ArrayList<Task> tasks,
+                                 String separator) throws ChooException {
         String taskDetails = command.substring("event".length()).trim();
         if (taskDetails.isEmpty()) {
-            throw new IllegalArgumentException("An event needs a description.");
+            throw new ChooException("An event needs a description.");
         }
 
         int fromIndex = taskDetails.indexOf("/from");
         int toIndex = taskDetails.indexOf("/to");
         if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
-            throw new IllegalArgumentException("An event needs both /from and /to values.");
+            throw new ChooException("An event needs both /from and /to values.");
         }
 
         String description = taskDetails.substring(0, fromIndex).trim();
         String from = taskDetails.substring(fromIndex + 5, toIndex).trim();
         String to = taskDetails.substring(toIndex + 3).trim();
         if (description.isEmpty()) {
-            throw new IllegalArgumentException("An event needs a description.");
+            throw new ChooException("An event needs a description.");
         }
         if (from.isEmpty() || to.isEmpty()) {
-            throw new IllegalArgumentException("An event needs both /from and /to values.");
+            throw new ChooException("An event needs both /from and /to values.");
         }
         addTask(tasks, new Event(description, from, to), separator);
     }
