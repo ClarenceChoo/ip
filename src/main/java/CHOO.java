@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -18,6 +19,8 @@ public class CHOO {
         System.out.println("What can I do for you?");
         System.out.println(separator);
 
+        ArrayList<String> tasks = new ArrayList<>();
+
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
@@ -27,7 +30,16 @@ public class CHOO {
                 break;
             }
 
-            System.out.println(command);
+            if (command.equals("list")) {
+                for (int i = 0; i < tasks.size(); i++) {
+                    System.out.println((i + 1) + ". " + tasks.get(i));
+                }
+                System.out.println(separator);
+                continue;
+            }
+
+            tasks.add(command);
+            System.out.println("added: " + command);
             System.out.println(separator);
         }
     }
