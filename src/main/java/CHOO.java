@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -24,7 +25,7 @@ public class CHOO {
         System.out.println("What can I do for you?");
         System.out.println(separator);
 
-        ArrayList<Task> tasks = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
@@ -40,7 +41,7 @@ public class CHOO {
         }
     }
 
-    private static boolean executeCommand(String command, ArrayList<Task> tasks,
+    private static boolean executeCommand(String command, List<Task> tasks,
                                           String separator) throws ChooException {
         String trimmedCommand = command.trim();
         if (trimmedCommand.equals("bye")) {
@@ -92,7 +93,7 @@ public class CHOO {
     }
 
     private static void updateTaskStatus(String command, String keyword,
-                                         ArrayList<Task> tasks, String separator,
+                                         List<Task> tasks, String separator,
                                          boolean isMarking) throws ChooException {
         int taskNumber = getTaskNumber(command, keyword, tasks);
         Task task = tasks.get(taskNumber - 1);
@@ -107,7 +108,7 @@ public class CHOO {
         System.out.println(separator);
     }
 
-    private static void deleteTask(String command, ArrayList<Task> tasks,
+    private static void deleteTask(String command, List<Task> tasks,
                                    String separator) throws ChooException {
         int taskNumber = getTaskNumber(command, "delete", tasks);
         Task removedTask = tasks.remove(taskNumber - 1);
@@ -118,7 +119,7 @@ public class CHOO {
     }
 
     private static int getTaskNumber(String command, String keyword,
-                                     ArrayList<Task> tasks) throws ChooException {
+                                     List<Task> tasks) throws ChooException {
         String taskNumberText = command.substring(keyword.length()).trim();
         int taskNumber;
         try {
@@ -135,7 +136,7 @@ public class CHOO {
         return taskNumber;
     }
 
-    private static void addTodo(String command, ArrayList<Task> tasks,
+    private static void addTodo(String command, List<Task> tasks,
                                 String separator) throws ChooException {
         String description = command.substring("todo".length()).trim();
         if (description.isEmpty()) {
@@ -144,7 +145,7 @@ public class CHOO {
         addTask(tasks, new Todo(description), separator);
     }
 
-    private static void addDeadline(String command, ArrayList<Task> tasks,
+    private static void addDeadline(String command, List<Task> tasks,
                                     String separator) throws ChooException {
         String taskDetails = command.substring("deadline".length()).trim();
         if (taskDetails.isEmpty()) {
@@ -167,7 +168,7 @@ public class CHOO {
         addTask(tasks, new Deadline(description, by), separator);
     }
 
-    private static void addEvent(String command, ArrayList<Task> tasks,
+    private static void addEvent(String command, List<Task> tasks,
                                  String separator) throws ChooException {
         String taskDetails = command.substring("event".length()).trim();
         if (taskDetails.isEmpty()) {
@@ -192,7 +193,7 @@ public class CHOO {
         addTask(tasks, new Event(description, from, to), separator);
     }
 
-    private static void addTask(ArrayList<Task> tasks, Task task, String separator) {
+    private static void addTask(List<Task> tasks, Task task, String separator) {
         tasks.add(task);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
