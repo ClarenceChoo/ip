@@ -65,7 +65,7 @@ public class CHOO {
             }
 
             if (command.startsWith("todo ")) {
-                Task task = new Task(command.substring(5));
+                Task task = new Todo(command.substring(5));
                 addTask(tasks, task, separator);
                 continue;
             }
@@ -75,7 +75,7 @@ public class CHOO {
                 int byIndex = taskDetails.indexOf(" /by ");
                 String description = taskDetails.substring(0, byIndex);
                 String by = taskDetails.substring(byIndex + 5);
-                Task task = new Task("D", description, " (by: " + by + ")");
+                Task task = new Deadline(description, by);
                 addTask(tasks, task, separator);
                 continue;
             }
@@ -87,13 +87,12 @@ public class CHOO {
                 String description = taskDetails.substring(0, fromIndex);
                 String from = taskDetails.substring(fromIndex + 7, toIndex);
                 String to = taskDetails.substring(toIndex + 5);
-                Task task = new Task("E", description,
-                        " (from: " + from + " to: " + to + ")");
+                Task task = new Event(description, from, to);
                 addTask(tasks, task, separator);
                 continue;
             }
 
-            Task task = new Task(command);
+            Task task = new Todo(command);
             addTask(tasks, task, separator);
         }
     }
