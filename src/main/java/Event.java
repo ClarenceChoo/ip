@@ -19,6 +19,24 @@ public class Event extends Task {
     }
 
     /**
+     * Returns the event start text as entered by the user.
+     *
+     * @return event start text
+     */
+    public String getFrom() {
+        return this.from;
+    }
+
+    /**
+     * Returns the event end text as entered by the user.
+     *
+     * @return event end text
+     */
+    public String getTo() {
+        return this.to;
+    }
+
+    /**
      * Returns this task with its Event type marker and time range.
      *
      * @return formatted Event

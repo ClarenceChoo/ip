@@ -3,6 +3,77 @@
 Run this plan with the project-specific `test-ui` skill. Expected output is
 compared exactly, including spaces, separators, and line order.
 
+Cases may include `Initial data:` and `Expected data:` blocks for
+`data/choo.txt`. Each case runs in a separate temporary working directory.
+
+## Test case: Load and automatically save tasks
+
+Aim: Verify startup loading and saving after mark, unmark, delete, and add operations.
+
+Initial data:
+```text
+T | 1 | loaded todo
+D | 0 | loaded deadline | Friday
+E | 0 | loaded event | Monday | Tuesday
+```
+
+Input:
+```text
+list
+mark 2
+unmark 1
+delete 2
+todo new | task
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] loaded todo
+2.[D][ ] loaded deadline (by: Friday)
+3.[E][ ] loaded event (from: Monday to: Tuesday)
+____________________________________________________________
+Nice! I've marked this task as done:
+  [D][X] loaded deadline (by: Friday)
+____________________________________________________________
+OK, I've marked this task as not done yet:
+  [T][ ] loaded todo
+____________________________________________________________
+Noted. I've removed this task:
+  [D][X] loaded deadline (by: Friday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] new | task
+Now you have 3 tasks in the list.
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] loaded todo
+2.[E][ ] loaded event (from: Monday to: Tuesday)
+3.[T][ ] new | task
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Expected data:
+```text
+T | 0 | loaded todo
+E | 0 | loaded event | Monday | Tuesday
+T | 0 | new \| task
+```
+
 ## Test case: Level 4 task types
 
 Aim: Verify ToDo, Deadline, and Event parsing, arbitrary date strings, task counts, marking, listing, and exit.

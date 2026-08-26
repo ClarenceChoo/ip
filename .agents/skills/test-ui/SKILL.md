@@ -12,7 +12,8 @@ The test plan is the source of truth for expected user-visible behavior.
 
 1. Read `test/ui-test-plan.md` and add or revise cases when the requested
    command behavior is not covered. Each case requires an aim, complete
-   console input, and complete expected output.
+   console input, and complete expected output. Persistence cases may also
+   specify initial and expected `data/choo.txt` contents.
 2. Confirm Java 25 is active with `java -version` and `javac -version`.
 3. From the repository root, run:
 
@@ -23,14 +24,17 @@ The test plan is the source of truth for expected user-visible behavior.
 4. Show the emitted input/output transcript. On failure, stop the test
    session and report the actual and expected outputs before changing code.
 
-The runner compiles into a temporary directory, so it must not create or
-commit `.class` files in the repository.
+The runner compiles into a temporary directory and runs every case in a
+separate temporary working directory. It must not create or commit `.class`
+or task-data files in the repository.
 
 ## Test plan format
 
 Each case has this structure: a `## Test case: NAME` heading, an `Aim:`
 line, an `Input:` text-fenced block, and an `Expected output:` text-fenced
-block. See `test/ui-test-plan.md` for a complete example.
+block. Persistence cases can put an `Initial data:` block before `Input:`
+and an `Expected data:` block after `Expected output:`. See
+`test/ui-test-plan.md` for complete examples.
 
 ## Quick reference
 
