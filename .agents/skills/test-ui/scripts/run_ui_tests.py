@@ -16,8 +16,10 @@ class TestCase:
 
     name: str
     aim: str
+    initial_data: str | None
     input_text: str
     expected_output: str
+    expected_data: str | None
 
 
 def read_fenced_block(lines: list[str], index: int, label: str) -> tuple[str, int]:
@@ -58,11 +60,23 @@ def parse_plan(plan_path: Path) -> list[TestCase]:
         index += 1
         while index < len(lines) and not lines[index].strip():
             index += 1
+        initial_data = None
+        if index < len(lines) and lines[index].strip() == "Initial data:":
+            initial_data, index = read_fenced_block(lines, index, "Initial data:")
+            while index < len(lines) and not lines[index].strip():
+                index += 1
         input_text, index = read_fenced_block(lines, index, "Input:")
         while index < len(lines) and not lines[index].strip():
             index += 1
         expected_output, index = read_fenced_block(lines, index, "Expected output:")
-        cases.append(TestCase(name, aim, input_text, expected_output))
+        while index < len(lines) and not lines[index].strip():
+            index += 1
+        expected_data = None
+        if index < len(lines) and lines[index].strip() == "Expected data:":
+            expected_data, index = read_fenced_block(lines, index, "Expected data:")
+        cases.append(TestCase(
+            name, aim, initial_data, input_text, expected_output, expected_data
+        ))
 
     if not cases:
         raise ValueError("The UI test plan contains no test cases")
@@ -98,30 +112,49 @@ def compile_application(repo_root: Path, classes_dir: Path) -> None:
 
 def run_case(repo_root: Path, classes_dir: Path, case: TestCase) -> bool:
     """Run one isolated console session and report whether it matches."""
-    result = subprocess.run(
-        ["java", "-cp", str(classes_dir), "CHOO"],
-        cwd=repo_root,
-        input=case.input_text,
-        capture_output=True,
-        text=True,
-        timeout=10,
-        check=False,
-    )
-    print(f"Test case: {case.name}")
-    print(f"Aim: {case.aim}")
-    print_block("Console input", case.input_text)
-    print_block("Console output", result.stdout)
+    with tempfile.TemporaryDirectory(prefix="choo-ui-case-") as case_dir:
+        working_directory = Path(case_dir)
+        data_file = working_directory / "data" / "choo.txt"
+        if case.initial_data is not None:
+            data_file.parent.mkdir(parents=True)
+            data_file.write_text(case.initial_data, encoding="utf-8")
 
-    if result.returncode == 0 and result.stdout == case.expected_output:
-        print("Result: PASS")
-        return True
+        result = subprocess.run(
+            ["java", "-cp", str(classes_dir), "CHOO"],
+            cwd=working_directory,
+            input=case.input_text,
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+        actual_data = data_file.read_text(encoding="utf-8") if data_file.exists() else None
 
-    print("Result: FAIL")
-    print_block("Expected output", case.expected_output)
-    print_block("Actual output", result.stdout)
-    if result.stderr:
-        print_block("Standard error", result.stderr)
-    return False
+        print(f"Test case: {case.name}")
+        print(f"Aim: {case.aim}")
+        if case.initial_data is not None:
+            print_block("Initial data", case.initial_data)
+        print_block("Console input", case.input_text)
+        print_block("Console output", result.stdout)
+        if case.expected_data is not None and actual_data is not None:
+            print_block("Saved data", actual_data)
+
+        output_matches = result.stdout == case.expected_output
+        data_matches = case.expected_data is None or actual_data == case.expected_data
+        if result.returncode == 0 and output_matches and data_matches:
+            print("Result: PASS")
+            return True
+
+        print("Result: FAIL")
+        if not output_matches:
+            print_block("Expected output", case.expected_output)
+            print_block("Actual output", result.stdout)
+        if not data_matches:
+            print_block("Expected data", case.expected_data or "")
+            print_block("Actual data", actual_data or "<missing>\n")
+        if result.stderr:
+            print_block("Standard error", result.stderr)
+        return False
 
 
 def main() -> int:

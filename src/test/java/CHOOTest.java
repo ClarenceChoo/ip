@@ -2,6 +2,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Checks the user-visible behavior of the CHOO command-line interface.
@@ -12,7 +14,7 @@ public class CHOOTest {
      *
      * @param args command-line arguments; not used
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String input = "todo\n"
                 + "mystery command\n"
                 + "todo keep this\n"
@@ -22,13 +24,16 @@ public class CHOOTest {
                 + "list\nbye\n";
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream originalOutput = System.out;
+        java.io.InputStream originalInput = System.in;
+        Path dataFile = Files.createTempDirectory("choo-command-test-")
+                .resolve("data").resolve("choo.txt");
 
         try {
             System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
             System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
-
-            CHOO.main(new String[0]);
+            CHOO.run(new Storage(dataFile));
         } finally {
+            System.setIn(originalInput);
             System.setOut(originalOutput);
         }
 

@@ -39,6 +39,24 @@ public class Task {
     }
 
     /**
+     * Returns whether this task is completed.
+     *
+     * @return {@code true} if completed
+     */
+    public boolean isDone() {
+        return this.status == TaskStatus.DONE;
+    }
+
+    /**
+     * Returns the task description.
+     *
+     * @return task description
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
      * Returns the task in the format displayed to the user.
      *
      * @return task status followed by its description

@@ -1,5 +1,5 @@
 /**
- * Represents an invalid command or argument entered into CHOO.
+ * Represents an error that CHOO can explain to the user.
  */
 public class ChooException extends Exception {
     private static final long serialVersionUID = 1L;
