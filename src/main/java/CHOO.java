@@ -1,4 +1,5 @@
 import java.nio.file.Path;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -203,7 +204,12 @@ public class CHOO {
         if (by.isEmpty()) {
             throw new ChooException("A deadline needs a /by date or time.");
         }
-        addTask(tasks, new Deadline(description, by), storage, separator);
+        try {
+            addTask(tasks, new Deadline(description, by), storage, separator);
+        } catch (DateTimeParseException exception) {
+            throw new ChooException(
+                    "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
+        }
     }
 
     private static void addEvent(String command, List<Task> tasks, Storage storage,

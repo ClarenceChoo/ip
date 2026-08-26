@@ -4,6 +4,8 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,11 @@ import java.util.List;
  * Saves tasks to a text file and restores them between CHOO sessions.
  */
 public class Storage {
+    private static final DateTimeFormatter STORED_DEADLINE_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd");
+    private static final DateTimeFormatter STORED_DEADLINE_DATE_TIME_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
+
     private final Path dataFile;
 
     /**
@@ -87,8 +94,10 @@ public class Storage {
         String description = escape(task.getDescription());
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
+            DateTimeFormatter storageFormat = deadline.hasTime()
+                    ? STORED_DEADLINE_DATE_TIME_FORMAT : STORED_DEADLINE_DATE_FORMAT;
             return "D | " + status + " | " + description
-                    + " | " + escape(deadline.getBy());
+                    + " | " + deadline.getBy().format(storageFormat);
         }
         if (task instanceof Event) {
             Event event = (Event) task;
@@ -110,7 +119,11 @@ public class Storage {
         if (type.equals("T") && fields.size() == 3) {
             task = new Todo(fields.get(2));
         } else if (type.equals("D") && fields.size() == 4) {
-            task = new Deadline(fields.get(2), fields.get(3));
+            try {
+                task = new Deadline(fields.get(2), fields.get(3));
+            } catch (DateTimeParseException exception) {
+                throw unsupportedDeadlineData(lineNumber);
+            }
         } else if (type.equals("E") && fields.size() == 5) {
             task = new Event(fields.get(2), fields.get(3), fields.get(4));
         } else {
@@ -172,5 +185,10 @@ public class Storage {
 
     private static ChooException corruptedData(int lineNumber) {
         return new ChooException("The task data file is corrupted at line " + lineNumber + ".");
+    }
+
+    private static ChooException unsupportedDeadlineData(int lineNumber) {
+        return new ChooException("The deadline at line " + lineNumber
+                + " uses an unsupported date. Change it to yyyy-MM-dd or yyyy-MM-dd HHmm.");
     }
 }

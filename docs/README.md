@@ -27,11 +27,25 @@ Example: `todo read book`
 ## Adding a deadline
 
 Use `deadline DESCRIPTION /by DATE_OR_TIME` for a task that must be completed
-by a particular date or time.
+by a particular date or time. Enter either `yyyy-MM-dd` for a date or
+`yyyy-MM-dd HHmm` for a date and 24-hour time.
 
-Example: `deadline submit report /by Friday 5pm`
+Examples:
 
-The date or time is stored exactly as entered.
+- `deadline return book /by 2019-12-02`
+- `deadline submit report /by 2019-12-02 1800`
+
+CHOO displays these deadlines as `Dec 2 2019` and
+`Dec 2 2019, 6:00PM`, respectively. Impossible dates and unsupported formats
+are rejected.
+
+A date-only deadline remains date-only. If you enter midnight explicitly,
+such as `2019-12-02 0000`, CHOO displays it as `Dec 2 2019, 12:00AM`.
+
+Deadline rows saved by an older CHOO version with free-form dates (such as
+`Friday`) cannot be converted safely. If CHOO identifies one when starting,
+edit that row in `data/choo.txt` to use `yyyy-MM-dd` or `yyyy-MM-dd HHmm`;
+CHOO reports the affected line and leaves the file unchanged.
 
 ## Adding an event
 
@@ -49,7 +63,7 @@ Example output:
 
 ```text
 1.[T][ ] read book
-2.[D][X] return book (by: Friday)
+2.[D][X] return book (by: Dec 2 2019)
 3.[E][ ] project meeting (from: Monday 2pm to: 4pm)
 ```
 
