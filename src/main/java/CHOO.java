@@ -1,19 +1,32 @@
 import java.nio.file.Path;
-import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * Entry point for the CHOO chatbot.
  */
 public class CHOO {
+    private final Storage storage;
+    private final Ui ui;
+    private TaskList tasks;
+
+    /**
+     * Creates CHOO with its persistence and user-interface collaborators.
+     *
+     * @param storage storage used to load and save tasks
+     * @param ui user interface used for console interaction
+     */
+    public CHOO(Storage storage, Ui ui) {
+        this.storage = storage;
+        this.ui = ui;
+    }
+
     /**
      * Starts the chatbot and processes commands until the user exits.
      *
      * @param args command-line arguments; not used
      */
     public static void main(String[] args) {
-        run(new Storage(Path.of("data", "choo.txt")));
+        Storage storage = new Storage(Path.of("data", "choo.txt"));
+        new CHOO(storage, new Ui()).run();
     }
 
     /**
@@ -22,100 +35,61 @@ public class CHOO {
      * @param storage storage used to load and save tasks
      */
     public static void run(Storage storage) {
-        String separator = "____________________________________________________________";
-        String banner = "##### #   # ##### #####\n"
-                + "#     #   # #   # #   #\n"
-                + "#     ##### #   # #   #\n"
-                + "#     #   # #   # #   #\n"
-                + "##### #   # ##### #####\n";
+        new CHOO(storage, new Ui()).run();
+    }
 
-        System.out.println(separator);
-        System.out.print(banner);
-        System.out.println("Hello! I'm CHOO.");
-        System.out.println("What can I do for you?");
-        System.out.println(separator);
+    /**
+     * Processes commands until input ends or the user exits.
+     */
+    public void run() {
+        this.ui.showWelcome();
 
-        List<Task> tasks;
         try {
-            tasks = storage.load();
+            this.tasks = new TaskList(this.storage.load());
         } catch (ChooException exception) {
-            System.out.println("OOPS!!! " + exception.getMessage());
-            System.out.println(separator);
+            this.ui.showError(exception.getMessage());
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
+        while (this.ui.hasNextCommand()) {
+            String command = this.ui.readCommand();
             try {
-                if (executeCommand(command, tasks, storage, separator)) {
+                if (executeCommand(Parser.parse(command))) {
                     break;
                 }
             } catch (ChooException exception) {
-                System.out.println("OOPS!!! " + exception.getMessage());
-                System.out.println(separator);
+                this.ui.showError(exception.getMessage());
             }
         }
     }
 
-    private static boolean executeCommand(String command, List<Task> tasks,
-                                          Storage storage, String separator)
-            throws ChooException {
-        String trimmedCommand = command.trim();
-        if (trimmedCommand.equals("bye")) {
-            System.out.println("Bye. Hope to see you again soon!");
-            System.out.println(separator);
+    private boolean executeCommand(ParsedCommand parsedCommand) throws ChooException {
+        switch (parsedCommand.getType()) {
+        case BYE:
+            this.ui.showBye();
             return true;
-        }
-
-        if (trimmedCommand.equals("list")) {
-            System.out.println("Here are the tasks in your list:");
-            for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + "." + tasks.get(i));
-            }
-            System.out.println(separator);
+        case LIST:
+            this.ui.showTaskList(this.tasks.asList());
             return false;
-        }
-
-        if (trimmedCommand.equals("mark") || trimmedCommand.startsWith("mark ")) {
-            updateTaskStatus(trimmedCommand, "mark", tasks, storage, separator, true);
+        case MARK:
+            updateTaskStatus(parsedCommand.getTaskNumber(), true);
             return false;
-        }
-
-        if (trimmedCommand.equals("unmark") || trimmedCommand.startsWith("unmark ")) {
-            updateTaskStatus(trimmedCommand, "unmark", tasks, storage, separator, false);
+        case UNMARK:
+            updateTaskStatus(parsedCommand.getTaskNumber(), false);
             return false;
-        }
-
-        if (trimmedCommand.equals("delete") || trimmedCommand.startsWith("delete ")) {
-            deleteTask(trimmedCommand, tasks, storage, separator);
+        case DELETE:
+            deleteTask(parsedCommand.getTaskNumber());
             return false;
-        }
-
-        if (trimmedCommand.equals("todo") || trimmedCommand.startsWith("todo ")) {
-            addTodo(trimmedCommand, tasks, storage, separator);
+        case ADD:
+            addTask(parsedCommand.getTask());
             return false;
+        default:
+            throw new AssertionError("Unhandled command type: " + parsedCommand.getType());
         }
-
-        if (trimmedCommand.equals("deadline") || trimmedCommand.startsWith("deadline ")) {
-            addDeadline(trimmedCommand, tasks, storage, separator);
-            return false;
-        }
-
-        if (trimmedCommand.equals("event") || trimmedCommand.startsWith("event ")) {
-            addEvent(trimmedCommand, tasks, storage, separator);
-            return false;
-        }
-
-        throw new ChooException("I don't recognize that command.");
     }
 
-    private static void updateTaskStatus(String command, String keyword,
-                                         List<Task> tasks, Storage storage,
-                                         String separator,
-                                         boolean isMarking) throws ChooException {
-        int taskNumber = getTaskNumber(command, keyword, tasks);
-        Task task = tasks.get(taskNumber - 1);
+    private void updateTaskStatus(int taskNumber, boolean isMarking) throws ChooException {
+        Task task = this.tasks.get(taskNumber);
         boolean wasDone = task.isDone();
         if (isMarking) {
             task.markAsDone();
@@ -123,7 +97,7 @@ public class CHOO {
             task.markAsNotDone();
         }
         try {
-            storage.save(tasks);
+            this.storage.save(this.tasks.asList());
         } catch (ChooException exception) {
             if (wasDone) {
                 task.markAsDone();
@@ -132,123 +106,28 @@ public class CHOO {
             }
             throw exception;
         }
-        if (isMarking) {
-            System.out.println("Nice! I've marked this task as done:");
-        } else {
-            System.out.println("OK, I've marked this task as not done yet:");
-        }
-        System.out.println("  " + task);
-        System.out.println(separator);
+        this.ui.showTaskStatusChanged(task, isMarking);
     }
 
-    private static void deleteTask(String command, List<Task> tasks, Storage storage,
-                                   String separator) throws ChooException {
-        int taskNumber = getTaskNumber(command, "delete", tasks);
-        Task removedTask = tasks.remove(taskNumber - 1);
+    private void deleteTask(int taskNumber) throws ChooException {
+        Task removedTask = this.tasks.remove(taskNumber);
         try {
-            storage.save(tasks);
+            this.storage.save(this.tasks.asList());
         } catch (ChooException exception) {
-            tasks.add(taskNumber - 1, removedTask);
+            this.tasks.add(taskNumber, removedTask);
             throw exception;
         }
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + removedTask);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-        System.out.println(separator);
+        this.ui.showDeletedTask(removedTask, this.tasks.size());
     }
 
-    private static int getTaskNumber(String command, String keyword,
-                                     List<Task> tasks) throws ChooException {
-        String taskNumberText = command.substring(keyword.length()).trim();
-        int taskNumber;
+    private void addTask(Task task) throws ChooException {
+        this.tasks.add(task);
         try {
-            taskNumber = Integer.parseInt(taskNumberText);
-        } catch (NumberFormatException exception) {
-            throw new ChooException(
-                    "Enter a whole-number task position after " + keyword + ".");
-        }
-
-        if (taskNumber < 1 || taskNumber > tasks.size()) {
-            throw new ChooException(
-                    "Task number " + taskNumber + " is outside the list.");
-        }
-        return taskNumber;
-    }
-
-    private static void addTodo(String command, List<Task> tasks, Storage storage,
-                                String separator) throws ChooException {
-        String description = command.substring("todo".length()).trim();
-        if (description.isEmpty()) {
-            throw new ChooException("A todo needs a description.");
-        }
-        addTask(tasks, new Todo(description), storage, separator);
-    }
-
-    private static void addDeadline(String command, List<Task> tasks, Storage storage,
-                                    String separator) throws ChooException {
-        String taskDetails = command.substring("deadline".length()).trim();
-        if (taskDetails.isEmpty()) {
-            throw new ChooException("A deadline needs a description.");
-        }
-
-        int byIndex = taskDetails.indexOf("/by");
-        if (byIndex < 0) {
-            throw new ChooException("A deadline needs a /by date or time.");
-        }
-
-        String description = taskDetails.substring(0, byIndex).trim();
-        String by = taskDetails.substring(byIndex + 3).trim();
-        if (description.isEmpty()) {
-            throw new ChooException("A deadline needs a description.");
-        }
-        if (by.isEmpty()) {
-            throw new ChooException("A deadline needs a /by date or time.");
-        }
-        try {
-            addTask(tasks, new Deadline(description, by), storage, separator);
-        } catch (DateTimeParseException exception) {
-            throw new ChooException(
-                    "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
-        }
-    }
-
-    private static void addEvent(String command, List<Task> tasks, Storage storage,
-                                 String separator) throws ChooException {
-        String taskDetails = command.substring("event".length()).trim();
-        if (taskDetails.isEmpty()) {
-            throw new ChooException("An event needs a description.");
-        }
-
-        int fromIndex = taskDetails.indexOf("/from");
-        int toIndex = taskDetails.indexOf("/to");
-        if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
-            throw new ChooException("An event needs both /from and /to values.");
-        }
-
-        String description = taskDetails.substring(0, fromIndex).trim();
-        String from = taskDetails.substring(fromIndex + 5, toIndex).trim();
-        String to = taskDetails.substring(toIndex + 3).trim();
-        if (description.isEmpty()) {
-            throw new ChooException("An event needs a description.");
-        }
-        if (from.isEmpty() || to.isEmpty()) {
-            throw new ChooException("An event needs both /from and /to values.");
-        }
-        addTask(tasks, new Event(description, from, to), storage, separator);
-    }
-
-    private static void addTask(List<Task> tasks, Task task, Storage storage,
-                                String separator) throws ChooException {
-        tasks.add(task);
-        try {
-            storage.save(tasks);
+            this.storage.save(this.tasks.asList());
         } catch (ChooException exception) {
-            tasks.remove(tasks.size() - 1);
+            this.tasks.remove(this.tasks.size());
             throw exception;
         }
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-        System.out.println(separator);
+        this.ui.showAddedTask(task, this.tasks.size());
     }
 }
