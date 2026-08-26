@@ -18,7 +18,7 @@ public class CHOOTest {
         String input = "todo\n"
                 + "mystery command\n"
                 + "todo keep this\n"
-                + "deadline remove this /by Friday\n"
+                + "deadline remove this /by 2019-12-06\n"
                 + "event keep event /from Monday /to Tuesday\n"
                 + "delete 2\n"
                 + "list\nbye\n";
@@ -41,7 +41,7 @@ public class CHOOTest {
         assertContains(actualOutput, "OOPS!!! A todo needs a description.");
         assertContains(actualOutput, "OOPS!!! I don't recognize that command.");
         assertContains(actualOutput, "Noted. I've removed this task:");
-        assertContains(actualOutput, "[D][ ] remove this (by: Friday)");
+        assertContains(actualOutput, "[D][ ] remove this (by: Dec 6 2019)");
         assertContains(actualOutput, "Now you have 2 tasks in the list.");
         assertContains(actualOutput, "Here are the tasks in your list:\n"
                 + "1.[T][ ] keep this\n"

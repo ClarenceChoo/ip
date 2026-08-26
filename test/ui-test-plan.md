@@ -13,7 +13,7 @@ Aim: Verify startup loading and saving after mark, unmark, delete, and add opera
 Initial data:
 ```text
 T | 1 | loaded todo
-D | 0 | loaded deadline | Friday
+D | 0 | loaded deadline | 2019-12-06 0000
 E | 0 | loaded event | Monday | Tuesday
 ```
 
@@ -41,17 +41,17 @@ What can I do for you?
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] loaded todo
-2.[D][ ] loaded deadline (by: Friday)
+2.[D][ ] loaded deadline (by: Dec 6 2019, 12:00AM)
 3.[E][ ] loaded event (from: Monday to: Tuesday)
 ____________________________________________________________
 Nice! I've marked this task as done:
-  [D][X] loaded deadline (by: Friday)
+  [D][X] loaded deadline (by: Dec 6 2019, 12:00AM)
 ____________________________________________________________
 OK, I've marked this task as not done yet:
   [T][ ] loaded todo
 ____________________________________________________________
 Noted. I've removed this task:
-  [D][X] loaded deadline (by: Friday)
+  [D][X] loaded deadline (by: Dec 6 2019, 12:00AM)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
@@ -76,13 +76,13 @@ T | 0 | new \| task
 
 ## Test case: Level 4 task types
 
-Aim: Verify ToDo, Deadline, and Event parsing, arbitrary date strings, task counts, marking, listing, and exit.
+Aim: Verify task parsing, formatted deadline dates and times, task counts, marking, listing, and exit.
 
 Input:
 ```text
 todo borrow book
-deadline return book /by Sunday
-deadline do homework /by no idea :-p
+deadline return book /by 2019-12-06
+deadline do homework /by 2019-12-07 1800
 event project meeting /from Mon 2pm /to 4pm
 mark 2
 list
@@ -105,11 +105,11 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Dec 6 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] do homework (by: no idea :-p)
+  [D][ ] do homework (by: Dec 7 2019, 6:00PM)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
@@ -117,12 +117,12 @@ Got it. I've added this task:
 Now you have 4 tasks in the list.
 ____________________________________________________________
 Nice! I've marked this task as done:
-  [D][X] return book (by: Sunday)
+  [D][X] return book (by: Dec 6 2019)
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][ ] borrow book
-2.[D][X] return book (by: Sunday)
-3.[D][ ] do homework (by: no idea :-p)
+2.[D][X] return book (by: Dec 6 2019)
+3.[D][ ] do homework (by: Dec 7 2019, 6:00PM)
 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -136,7 +136,7 @@ Aim: Verify deletion removes the selected task, renumbers the list, and leaves s
 Input:
 ```text
 todo first
-deadline second /by Friday
+deadline second /by 2019-12-06
 event third /from Monday /to Tuesday
 delete
 delete two
@@ -166,7 +166,7 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] second (by: Friday)
+  [D][ ] second (by: Dec 6 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 Got it. I've added this task:
@@ -184,7 +184,7 @@ ____________________________________________________________
 OOPS!!! Task number 4 is outside the list.
 ____________________________________________________________
 Noted. I've removed this task:
-  [D][ ] second (by: Friday)
+  [D][ ] second (by: Dec 6 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 Here are the tasks in your list:
@@ -215,6 +215,8 @@ deadline report
 deadline /by Friday
 deadline report /by
 deadline report /by Friday
+deadline report /by 2019-02-29
+deadline report /by 2019-12-06
 event /from Monday /to Tuesday
 event meeting /from Monday
 event meeting /to Tuesday
@@ -249,8 +251,12 @@ OOPS!!! A deadline needs a description.
 ____________________________________________________________
 OOPS!!! A deadline needs a /by date or time.
 ____________________________________________________________
+OOPS!!! Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
+____________________________________________________________
+OOPS!!! Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
+____________________________________________________________
 Got it. I've added this task:
-  [D][ ] report (by: Friday)
+  [D][ ] report (by: Dec 6 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 OOPS!!! An event needs a description.
@@ -267,7 +273,7 @@ Now you have 3 tasks in the list.
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][ ] keep this
-2.[D][ ] report (by: Friday)
+2.[D][ ] report (by: Dec 6 2019)
 3.[E][ ] meeting (from: Monday to: Tuesday)
 ____________________________________________________________
 Bye. Hope to see you again soon!
