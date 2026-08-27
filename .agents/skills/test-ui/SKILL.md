@@ -10,6 +10,11 @@ The test plan is the source of truth for expected user-visible behavior.
 
 ## Workflow
 
+After every Java code change, update the affected JUnit tests and run
+`./gradlew test`. Keep focused JUnit coverage for roughly the highest-value
+50% of non-trivial methods, prioritizing parsing, persistence, state changes,
+and other core business logic.
+
 1. Read `test/ui-test-plan.md` and add or revise cases when the requested
    command behavior is not covered. Each case requires an aim, complete
    console input, and complete expected output. Persistence cases may also
