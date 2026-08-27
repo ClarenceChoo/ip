@@ -39,3 +39,24 @@ Run these commands from the project root:
 The first command compiles the project and checks the build. The second starts
 CHOO; enter `bye` to exit. In IntelliJ, ensure both the Project SDK and Gradle
 JVM use JDK 25, then reload the Gradle project using the elephant toolbar.
+
+## Creating the executable JAR
+
+From the project root, run:
+
+```bash
+./gradlew clean shadowJar
+```
+
+The fat JAR is created at `build/libs/choo.jar`. To test the distributable,
+copy only `choo.jar` into an empty folder, open a terminal in that folder, and
+run:
+
+```bash
+java -jar "choo.jar"
+```
+
+CHOO creates its `data/choo.txt` storage file relative to that folder. The
+generated JAR and `build/` directory are ignored by Git and must not be
+committed. To distribute CHOO, create a GitHub release with an appropriate
+version such as `v0.1` and attach `build/libs/choo.jar` as the release asset.
