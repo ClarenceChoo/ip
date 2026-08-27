@@ -9,7 +9,7 @@ public class ChooException extends Exception {
     /**
      * Creates a CHOO-specific exception with a user-facing explanation.
      *
-     * @param message explanation of the invalid input
+     * @param message explanation of the invalid input.
      */
     public ChooException(String message) {
         super(message);

@@ -1,11 +1,5 @@
 package choo.storage;
 
-import choo.exception.ChooException;
-import choo.task.Deadline;
-import choo.task.Event;
-import choo.task.Task;
-import choo.task.Todo;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -16,6 +10,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import choo.exception.ChooException;
+import choo.task.Deadline;
+import choo.task.Event;
+import choo.task.Task;
+import choo.task.Todo;
 
 /**
  * Saves tasks to a text file and restores them between CHOO sessions.
@@ -31,7 +31,7 @@ public class Storage {
     /**
      * Creates storage that uses the given data file.
      *
-     * @param dataFile relative or absolute path used for task data
+     * @param dataFile relative or absolute path used for task data.
      */
     public Storage(Path dataFile) {
         this.dataFile = dataFile;
@@ -40,8 +40,8 @@ public class Storage {
     /**
      * Loads all tasks from disk, or returns an empty list on first use.
      *
-     * @return tasks restored from the data file
-     * @throws ChooException if the file cannot be read or contains invalid data
+     * @return tasks restored from the data file.
+     * @throws ChooException if the file cannot be read or contains invalid data.
      */
     public List<Task> load() throws ChooException {
         if (!Files.exists(this.dataFile)) {
@@ -63,8 +63,8 @@ public class Storage {
     /**
      * Writes the complete task list, creating missing parent directories.
      *
-     * @param tasks tasks to save
-     * @throws ChooException if the data file cannot be written
+     * @param tasks tasks to save.
+     * @throws ChooException if the data file cannot be written.
      */
     public void save(List<Task> tasks) throws ChooException {
         List<String> lines = new ArrayList<>();

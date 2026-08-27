@@ -1,11 +1,11 @@
 package choo.parser;
 
+import java.time.format.DateTimeParseException;
+
 import choo.exception.ChooException;
 import choo.task.Deadline;
 import choo.task.Event;
 import choo.task.Todo;
-
-import java.time.format.DateTimeParseException;
 
 /**
  * Converts raw user input into structured commands.
@@ -17,9 +17,9 @@ public class Parser {
     /**
      * Parses a complete command line.
      *
-     * @param command raw user command
-     * @return structured command
-     * @throws ChooException if the command or its details are invalid
+     * @param command raw user command.
+     * @return structured command.
+     * @throws ChooException if the command or its details are invalid.
      */
     public static ParsedCommand parse(String command) throws ChooException {
         String trimmedCommand = command.trim();

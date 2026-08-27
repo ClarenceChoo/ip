@@ -1,10 +1,11 @@
 package choo.parser;
 
-import choo.exception.ChooException;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
+import choo.exception.ChooException;
 
 /**
  * Checks conversion of raw user input into structured commands.

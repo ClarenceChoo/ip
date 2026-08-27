@@ -1,12 +1,8 @@
 package choo.storage;
 
-import choo.exception.ChooException;
-import choo.task.Deadline;
-import choo.task.Event;
-import choo.task.Task;
-import choo.task.Todo;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,9 +10,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import choo.exception.ChooException;
+import choo.task.Deadline;
+import choo.task.Event;
+import choo.task.Task;
+import choo.task.Todo;
 
 /**
  * Tests saving and loading tasks using isolated temporary files.

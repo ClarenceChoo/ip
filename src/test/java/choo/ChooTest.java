@@ -1,7 +1,7 @@
 package choo;
 
-import choo.storage.Storage;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,13 +10,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import choo.storage.Storage;
 
 /**
  * Checks the user-visible behavior of the CHOO command-line interface.
  */
-public class CHOOTest {
+public class ChooTest {
     @Test
     void run_mixedValidAndInvalidCommands_preservesCorrectTaskState() throws Exception {
         String input = "todo\n"
@@ -35,7 +36,7 @@ public class CHOOTest {
         try {
             System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
             System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
-            CHOO.run(new Storage(dataFile));
+            Choo.run(new Storage(dataFile));
         } finally {
             System.setIn(originalInput);
             System.setOut(originalOutput);

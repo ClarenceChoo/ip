@@ -1,10 +1,7 @@
 package choo;
 
-import choo.exception.ChooException;
-import choo.storage.Storage;
-import choo.task.Task;
-import choo.task.Todo;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,13 +12,17 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import choo.exception.ChooException;
+import choo.storage.Storage;
+import choo.task.Task;
+import choo.task.Todo;
 
 /**
  * Checks that a failed disk write does not change CHOO's in-memory task list.
  */
-public class CHOOSaveFailureTest {
+public class ChooSaveFailureTest {
     @Test
     void run_additionCannotBeSaved_doesNotKeepTaskInMemory() throws Exception {
         Path blockingFile = Files.createTempFile("choo-blocked-parent-", ".tmp");
@@ -55,7 +56,7 @@ public class CHOOSaveFailureTest {
         try {
             System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
             System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
-            CHOO.run(storage);
+            Choo.run(storage);
         } finally {
             System.setIn(originalInput);
             System.setOut(originalOutput);

@@ -16,7 +16,7 @@ public enum TaskStatus {
     /**
      * Returns the symbol used to display this status.
      *
-     * @return status symbol
+     * @return status symbol.
      */
     public String getIcon() {
         return this.icon;
