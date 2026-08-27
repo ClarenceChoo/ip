@@ -4,6 +4,7 @@ import choo.exception.ChooException;
 import choo.storage.Storage;
 import choo.task.Task;
 import choo.task.Todo;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,33 +15,27 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Checks that a failed disk write does not change CHOO's in-memory task list.
  */
 public class CHOOSaveFailureTest {
-    /**
-     * Runs CHOO against a real path whose parent is a file, forcing save failure.
-     *
-     * @param args command-line arguments; not used
-     * @throws Exception if temporary test setup fails
-     */
-    public static void main(String[] args) throws Exception {
-        rejectsAnAdditionWhenSavingFails();
-        restoresStatusAndDeletionWhenSavingFails();
-    }
-
-    private static void rejectsAnAdditionWhenSavingFails() throws Exception {
+    @Test
+    void run_additionCannotBeSaved_doesNotKeepTaskInMemory() throws Exception {
         Path blockingFile = Files.createTempFile("choo-blocked-parent-", ".tmp");
         Storage storage = new Storage(blockingFile.resolve("choo.txt"));
         String actualOutput = runChoo(storage, "todo should not remain\nlist\nbye\n");
 
-        assertContains(actualOutput, "OOPS!!! I couldn't save the task data file.");
-        assertContains(actualOutput, "Here are the tasks in your list:\n"
-                + "____________________________________________________________");
-        assertDoesNotContain(actualOutput, "1.[T][ ] should not remain");
+        assertTrue(actualOutput.contains("OOPS!!! I couldn't save the task data file."));
+        assertTrue(actualOutput.contains("Here are the tasks in your list:\n"
+                + "____________________________________________________________"));
+        assertFalse(actualOutput.contains("1.[T][ ] should not remain"));
     }
 
-    private static void restoresStatusAndDeletionWhenSavingFails() throws Exception {
+    @Test
+    void run_statusAndDeletionCannotBeSaved_restoresPreviousState() throws Exception {
         Todo incompleteTask = new Todo("incomplete");
         Todo completedTask = new Todo("completed");
         completedTask.markAsDone();
@@ -48,8 +43,8 @@ public class CHOOSaveFailureTest {
         String input = "mark 1\nunmark 2\ndelete 1\nlist\nbye\n";
         String actualOutput = runChoo(storage, input);
 
-        assertContains(actualOutput, "1.[T][ ] incomplete");
-        assertContains(actualOutput, "2.[T][X] completed");
+        assertTrue(actualOutput.contains("1.[T][ ] incomplete"));
+        assertTrue(actualOutput.contains("2.[T][X] completed"));
     }
 
     private static String runChoo(Storage storage, String input) throws Exception {
@@ -67,20 +62,6 @@ public class CHOOSaveFailureTest {
         }
 
         return output.toString(StandardCharsets.UTF_8);
-    }
-
-    private static void assertContains(String actual, String expectedPart) {
-        if (!actual.contains(expectedPart)) {
-            throw new AssertionError("Expected to find: " + expectedPart
-                    + System.lineSeparator() + "Actual: " + actual);
-        }
-    }
-
-    private static void assertDoesNotContain(String actual, String unexpectedPart) {
-        if (actual.contains(unexpectedPart)) {
-            throw new AssertionError("Did not expect to find: " + unexpectedPart
-                    + System.lineSeparator() + "Actual: " + actual);
-        }
     }
 
     private static class AlwaysFailingStorage extends Storage {

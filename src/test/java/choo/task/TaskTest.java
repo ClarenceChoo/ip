@@ -3,17 +3,19 @@ package choo.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Checks the shared and type-specific behavior of the task hierarchy.
  */
 public class TaskTest {
-    /**
-     * Creates each subtype through the common {@link Task} type and checks
-     * its user-visible representation.
-     *
-     * @param args command-line arguments; not used
-     */
-    public static void main(String[] args) {
+    @Test
+    void toString_eachTaskSubtype_includesTypeAndDetails() {
         Task todo = new Todo("borrow book");
         Deadline deadline = new Deadline("return book", "2019-12-02");
         Deadline timedDeadline = new Deadline("submit report", "2019-12-02 1800");
@@ -31,37 +33,34 @@ public class TaskTest {
                 leapDayDeadline.toString());
         assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0), deadline.getBy());
         assertEquals("[E][ ] project meeting (from: Mon 2pm to: 4pm)", event.toString());
-
-        deadline.markAsDone();
-        assertEquals("[D][X] return book (by: Dec 2 2019)", deadline.toString());
-
-        assertInvalidDeadline("2019-12-02 2400");
-        assertInvalidDeadline("2019-12-02 2360");
-        assertInvalidDeadline("2019-1-02");
-        assertInvalidDeadline("+12345-01-01");
-        assertInvalidDeadline("-0001-01-01");
     }
 
-    private static void assertInvalidDeadline(String by) {
-        try {
-            new Deadline("invalid", by);
-            throw new AssertionError("Expected an invalid deadline: " + by);
-        } catch (DateTimeParseException expected) {
-            // Expected: invalid date syntax and values must be rejected.
-        }
+    @Test
+    void markAndUnmark_updatesCompletionState() {
+        Task task = new Todo("borrow book");
+        assertFalse(task.isDone());
+
+        task.markAsDone();
+        assertTrue(task.isDone());
+        assertEquals("[T][X] borrow book", task.toString());
+
+        task.markAsNotDone();
+        assertFalse(task.isDone());
     }
 
-    private static void assertEquals(String expected, String actual) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError("Expected: " + expected
-                    + System.lineSeparator() + "Actual: " + actual);
-        }
-    }
-
-    private static void assertEquals(Object expected, Object actual) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError("Expected: " + expected
-                    + System.lineSeparator() + "Actual: " + actual);
+    @Test
+    void deadline_invalidDates_throwDateTimeParseException() {
+        String[] invalidDates = {
+            "2019-12-02 2400",
+            "2019-12-02 2360",
+            "2019-1-02",
+            "2019-02-29",
+            "+12345-01-01",
+            "-0001-01-01"
+        };
+        for (String by : invalidDates) {
+            assertThrows(DateTimeParseException.class,
+                    () -> new Deadline("invalid", by), by);
         }
     }
 }

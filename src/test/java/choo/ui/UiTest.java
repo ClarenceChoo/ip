@@ -1,6 +1,7 @@
 package choo.ui;
 
 import choo.task.Todo;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,16 +9,14 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Checks console input and output handled by {@link Ui}.
  */
 public class UiTest {
-    /**
-     * Runs focused UI checks.
-     *
-     * @param args command-line arguments; not used
-     */
-    public static void main(String[] args) {
+    @Test
+    void readAndShowCommands_formatsCompleteConsoleSession() {
         String input = "list\nbye\n";
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         Ui ui = new Ui(
@@ -52,10 +51,4 @@ public class UiTest {
         assertEquals(expected, output.toString(StandardCharsets.UTF_8));
     }
 
-    private static void assertEquals(String expected, String actual) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError("Expected: " + expected
-                    + System.lineSeparator() + "Actual: " + actual);
-        }
-    }
 }

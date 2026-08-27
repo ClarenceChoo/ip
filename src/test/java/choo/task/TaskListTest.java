@@ -1,20 +1,20 @@
 package choo.task;
 
 import choo.exception.ChooException;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Checks task collection operations and one-based position validation.
  */
 public class TaskListTest {
-    /**
-     * Runs focused task-list checks.
-     *
-     * @param args command-line arguments; not used
-     */
-    public static void main(String[] args) throws ChooException {
+    @Test
+    void constructor_sourceListChanges_doesNotChangeTaskList() throws ChooException {
         List<Task> initialTasks = new ArrayList<>();
         initialTasks.add(new Todo("first"));
         TaskList tasks = new TaskList(initialTasks);
@@ -22,41 +22,43 @@ public class TaskListTest {
 
         assertEquals(1, tasks.size());
         assertEquals("[T][ ] first", tasks.get(1).toString());
+    }
 
+    @Test
+    void add_validPositions_insertsAtOneBasedPosition() throws ChooException {
+        TaskList tasks = new TaskList(List.of(new Todo("first")));
         tasks.add(new Todo("third"));
         tasks.add(2, new Todo("second"));
+
         assertEquals("[T][ ] second", tasks.get(2).toString());
         assertEquals("[T][ ] third", tasks.get(3).toString());
+    }
 
+    @Test
+    void remove_validPosition_removesAndReturnsTask() throws ChooException {
+        TaskList tasks = new TaskList(List.of(
+                new Todo("first"), new Todo("second"), new Todo("third")));
         Task removed = tasks.remove(2);
+
         assertEquals("[T][ ] second", removed.toString());
         assertEquals("[T][ ] third", tasks.get(2).toString());
         assertEquals(2, tasks.asList().size());
+    }
 
+    @Test
+    void positionOperations_outsideList_throwSpecificError() {
+        TaskList tasks = new TaskList(List.of(new Todo("only")));
         assertInvalidPosition(tasks, 0);
-        assertInvalidPosition(tasks, 3);
+        assertInvalidPosition(tasks, 2);
+        ChooException addException = assertThrows(ChooException.class,
+                () -> tasks.add(3, new Todo("invalid")));
+        assertEquals("Task number 3 is outside the list.", addException.getMessage());
     }
 
     private static void assertInvalidPosition(TaskList tasks, int taskNumber) {
-        try {
-            tasks.get(taskNumber);
-            throw new AssertionError("Expected invalid task number: " + taskNumber);
-        } catch (ChooException exception) {
-            assertEquals("Task number " + taskNumber + " is outside the list.",
-                    exception.getMessage());
-        }
-    }
-
-    private static void assertEquals(int expected, int actual) {
-        if (expected != actual) {
-            throw new AssertionError("Expected: " + expected + ", actual: " + actual);
-        }
-    }
-
-    private static void assertEquals(String expected, String actual) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError("Expected: " + expected
-                    + System.lineSeparator() + "Actual: " + actual);
-        }
+        ChooException exception = assertThrows(ChooException.class,
+                () -> tasks.get(taskNumber));
+        assertEquals("Task number " + taskNumber + " is outside the list.",
+                exception.getMessage());
     }
 }
