@@ -73,6 +73,13 @@ public class CHOO {
         }
     }
 
+    /**
+     * Executes a parsed command and reports whether the session should end.
+     *
+     * @param parsedCommand Command and associated details to execute.
+     * @return {@code true} when the command ends the session.
+     * @throws ChooException If the command cannot be completed.
+     */
     private boolean executeCommand(ParsedCommand parsedCommand) throws ChooException {
         switch (parsedCommand.getType()) {
         case BYE:
@@ -98,6 +105,13 @@ public class CHOO {
         }
     }
 
+    /**
+     * Updates and saves a task's completion status, restoring it if saving fails.
+     *
+     * @param taskNumber One-based position of the task to update.
+     * @param isMarking Whether the task should be marked as completed.
+     * @throws ChooException If the position is invalid or the change cannot be saved.
+     */
     private void updateTaskStatus(int taskNumber, boolean isMarking) throws ChooException {
         Task task = this.tasks.get(taskNumber);
         boolean wasDone = task.isDone();
@@ -119,6 +133,12 @@ public class CHOO {
         this.ui.showTaskStatusChanged(task, isMarking);
     }
 
+    /**
+     * Deletes and saves a task, reinserting it at its original position if saving fails.
+     *
+     * @param taskNumber One-based position of the task to delete.
+     * @throws ChooException If the position is invalid or the deletion cannot be saved.
+     */
     private void deleteTask(int taskNumber) throws ChooException {
         Task removedTask = this.tasks.remove(taskNumber);
         try {
@@ -130,6 +150,12 @@ public class CHOO {
         this.ui.showDeletedTask(removedTask, this.tasks.size());
     }
 
+    /**
+     * Adds and saves a task, removing it again if saving fails.
+     *
+     * @param task Task to add.
+     * @throws ChooException If the addition cannot be saved.
+     */
     private void addTask(Task task) throws ChooException {
         this.tasks.add(task);
         try {

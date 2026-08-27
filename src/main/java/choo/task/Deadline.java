@@ -68,6 +68,13 @@ public class Deadline extends Task {
         return "[D]" + super.toString() + " (by: " + this.by.format(displayFormat) + ")";
     }
 
+    /**
+     * Parses a strict deadline date or date-time, using midnight for date-only input.
+     *
+     * @param by Deadline in {@code yyyy-MM-dd} or {@code yyyy-MM-dd HHmm} format.
+     * @return Parsed deadline date and time.
+     * @throws DateTimeParseException If the syntax or date-time value is invalid.
+     */
     private static LocalDateTime parseBy(String by) {
         if (!by.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}( [0-9]{4})?")) {
             throw new DateTimeParseException("Invalid deadline format", by, 0);

@@ -97,6 +97,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Serializes a task into the escaped, pipe-delimited storage format.
+     *
+     * @param task Task to serialize.
+     * @return One complete storage line.
+     */
     private static String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         String description = escape(task.getDescription());
@@ -116,6 +122,14 @@ public class Storage {
         return "T | " + status + " | " + description;
     }
 
+    /**
+     * Restores one task from a storage line and validates every stored field.
+     *
+     * @param line Storage line to parse.
+     * @param lineNumber One-based line number used in error messages.
+     * @return Restored task.
+     * @throws ChooException If the line is corrupted or uses an unsupported date.
+     */
     private static Task parseTask(String line, int lineNumber) throws ChooException {
         List<String> fields = splitEscapedFields(line, lineNumber);
         if (fields.size() < 2 || !(fields.get(1).equals("0") || fields.get(1).equals("1"))) {
@@ -149,6 +163,14 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Splits a storage line while decoding escaped separators and backslashes.
+     *
+     * @param line Storage line to split.
+     * @param lineNumber One-based line number used in error messages.
+     * @return Decoded and trimmed fields.
+     * @throws ChooException If the line contains an invalid escape sequence.
+     */
     private static List<String> splitEscapedFields(String line, int lineNumber)
             throws ChooException {
         List<String> fields = new ArrayList<>();
@@ -178,10 +200,22 @@ public class Storage {
         return fields;
     }
 
+    /**
+     * Escapes storage-format separators and escape characters in task text.
+     *
+     * @param text Text to encode.
+     * @return Escaped text safe for a storage field.
+     */
     private static String escape(String text) {
         return text.replace("\\", "\\\\").replace("|", "\\|");
     }
 
+    /**
+     * Replaces the data file atomically when supported, with a portable fallback.
+     *
+     * @param temporaryFile Fully written temporary file.
+     * @throws IOException If neither replacement strategy succeeds.
+     */
     private void replaceDataFile(Path temporaryFile) throws IOException {
         try {
             Files.move(temporaryFile, this.dataFile,
