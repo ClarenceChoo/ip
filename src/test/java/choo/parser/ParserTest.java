@@ -46,6 +46,14 @@ public class ParserTest {
     }
 
     @Test
+    void parse_findCommand_returnsKeyword() throws ChooException {
+        ParsedCommand find = Parser.parse("  find project book  ");
+
+        assertEquals(CommandType.FIND, find.getType());
+        assertEquals("project book", find.getKeyword());
+    }
+
+    @Test
     void parse_invalidCommands_throwsSpecificErrors() {
         assertError("mark two", "Enter a whole-number task position after mark.");
         assertError("todo", "A todo needs a description.");
@@ -54,6 +62,7 @@ public class ParserTest {
         assertError("deadline report /by Friday",
                 "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
         assertError("event meeting /from Mon", "An event needs both /from and /to values.");
+        assertError("find", "A find command needs a keyword.");
         assertError("mystery", "I don't recognize that command.");
     }
 

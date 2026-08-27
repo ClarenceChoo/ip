@@ -92,6 +92,22 @@ public class TaskList {
         return List.copyOf(this.tasks);
     }
 
+    /**
+     * Returns tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword case-sensitive keyword to search for
+     * @return matching tasks in their original order
+     */
+    public List<Task> find(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+        for (Task task : this.tasks) {
+            if (task.getDescription().contains(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return List.copyOf(matchingTasks);
+    }
+
     private void validateTaskNumber(int taskNumber) throws ChooException {
         if (taskNumber < 1 || taskNumber > this.tasks.size()) {
             throw invalidPosition(taskNumber);

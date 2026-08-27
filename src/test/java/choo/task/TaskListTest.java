@@ -55,6 +55,33 @@ public class TaskListTest {
         assertEquals("Task number 3 is outside the list.", addException.getMessage());
     }
 
+    @Test
+    void find_keyword_matchesDescriptionsInOriginalOrder() {
+        TaskList tasks = new TaskList(List.of(
+                new Todo("read book"),
+                new Deadline("return book", "2019-12-06"),
+                new Event("book club", "Monday", "Tuesday"),
+                new Todo("BOOK notes")));
+
+        List<Task> matchingTasks = tasks.find("book");
+
+        assertEquals(3, matchingTasks.size());
+        assertEquals("read book", matchingTasks.get(0).getDescription());
+        assertEquals("return book", matchingTasks.get(1).getDescription());
+        assertEquals("book club", matchingTasks.get(2).getDescription());
+    }
+
+    @Test
+    void find_caseMismatchOrScheduleOnlyMatch_returnsNoTasks() {
+        TaskList tasks = new TaskList(List.of(
+                new Deadline("submit report", "2019-12-06"),
+                new Event("orientation", "book room", "Tuesday"),
+                new Todo("BOOK notes")));
+
+        assertEquals(List.of(), tasks.find("book"));
+        assertEquals(List.of(), tasks.find("2019"));
+    }
+
     private static void assertInvalidPosition(TaskList tasks, int taskNumber) {
         ChooException exception = assertThrows(ChooException.class,
                 () -> tasks.get(taskNumber));
