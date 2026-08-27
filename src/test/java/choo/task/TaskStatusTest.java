@@ -1,3 +1,5 @@
+package choo.task;
+
 /**
  * Checks the display symbols represented by each task status.
  */

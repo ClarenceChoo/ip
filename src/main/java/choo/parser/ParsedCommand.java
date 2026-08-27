@@ -1,3 +1,7 @@
+package choo.parser;
+
+import choo.task.Task;
+
 /**
  * Carries a parsed command and the data needed to execute it.
  */

@@ -1,3 +1,5 @@
+package choo.exception;
+
 /**
  * Checks the chatbot-specific checked exception contract.
  */

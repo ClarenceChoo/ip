@@ -1,3 +1,7 @@
+package choo;
+
+import choo.storage.Storage;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

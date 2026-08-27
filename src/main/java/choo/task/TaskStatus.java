@@ -1,3 +1,5 @@
+package choo.task;
+
 /**
  * Represents whether a task is complete and supplies its display symbol.
  */

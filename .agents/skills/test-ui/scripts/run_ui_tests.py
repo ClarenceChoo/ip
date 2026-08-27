@@ -93,7 +93,7 @@ def print_block(label: str, content: str) -> None:
 
 def compile_application(repo_root: Path, classes_dir: Path) -> None:
     """Compile all production Java sources into a temporary directory."""
-    sources = sorted((repo_root / "src/main/java").glob("*.java"))
+    sources = sorted((repo_root / "src/main/java").rglob("*.java"))
     if not sources:
         raise ValueError("No Java sources found under src/main/java")
     result = subprocess.run(
@@ -120,7 +120,7 @@ def run_case(repo_root: Path, classes_dir: Path, case: TestCase) -> bool:
             data_file.write_text(case.initial_data, encoding="utf-8")
 
         result = subprocess.run(
-            ["java", "-cp", str(classes_dir), "CHOO"],
+            ["java", "-cp", str(classes_dir), "choo.CHOO"],
             cwd=working_directory,
             input=case.input_text,
             capture_output=True,
