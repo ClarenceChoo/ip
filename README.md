@@ -26,3 +26,16 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Using Gradle
+
+Run these commands from the project root:
+
+```bash
+./gradlew clean build
+./gradlew run
+```
+
+The first command compiles the project and checks the build. The second starts
+CHOO; enter `bye` to exit. In IntelliJ, ensure both the Project SDK and Gradle
+JVM use JDK 25, then reload the Gradle project using the elephant toolbar.
