@@ -28,9 +28,9 @@ public class Deadline extends Task {
     /**
      * Creates an incomplete Deadline with its due date or time.
      *
-     * @param description description of the task
-     * @param by due date in {@code yyyy-MM-dd} or {@code yyyy-MM-dd HHmm} format
-     * @throws DateTimeParseException if the date or time is invalid
+     * @param description description of the task.
+     * @param by due date in {@code yyyy-MM-dd} or {@code yyyy-MM-dd HHmm} format.
+     * @throws DateTimeParseException if the date or time is invalid.
      */
     public Deadline(String description, String by) {
         super(description);
@@ -41,7 +41,7 @@ public class Deadline extends Task {
     /**
      * Returns the deadline date and time.
      *
-     * @return deadline date and time
+     * @return deadline date and time.
      */
     public LocalDateTime getBy() {
         return this.by;
@@ -50,7 +50,7 @@ public class Deadline extends Task {
     /**
      * Returns whether the user supplied an explicit time for this deadline.
      *
-     * @return true if the deadline includes a time
+     * @return true if the deadline includes a time.
      */
     public boolean hasTime() {
         return this.hasTime;
@@ -59,7 +59,7 @@ public class Deadline extends Task {
     /**
      * Returns this task with its Deadline type marker and due text.
      *
-     * @return formatted Deadline
+     * @return formatted Deadline.
      */
     @Override
     public String toString() {

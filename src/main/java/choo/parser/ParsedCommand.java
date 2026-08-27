@@ -19,8 +19,8 @@ public class ParsedCommand {
     /**
      * Creates a command that has no additional data.
      *
-     * @param type command type
-     * @return parsed command
+     * @param type command type.
+     * @return parsed command.
      */
     public static ParsedCommand withoutDetails(CommandType type) {
         return new ParsedCommand(type, 0, null);
@@ -29,9 +29,9 @@ public class ParsedCommand {
     /**
      * Creates a command that targets a task number.
      *
-     * @param type command type
-     * @param taskNumber one-based task number
-     * @return parsed command
+     * @param type command type.
+     * @param taskNumber one-based task number.
+     * @return parsed command.
      */
     public static ParsedCommand forTaskNumber(CommandType type, int taskNumber) {
         return new ParsedCommand(type, taskNumber, null);
@@ -40,8 +40,8 @@ public class ParsedCommand {
     /**
      * Creates a command that adds a task.
      *
-     * @param task task to add
-     * @return parsed command
+     * @param task task to add.
+     * @return parsed command.
      */
     public static ParsedCommand forNewTask(Task task) {
         return new ParsedCommand(CommandType.ADD, 0, task);
@@ -50,7 +50,7 @@ public class ParsedCommand {
     /**
      * Returns the command type.
      *
-     * @return command type
+     * @return command type.
      */
     public CommandType getType() {
         return this.type;
@@ -59,7 +59,7 @@ public class ParsedCommand {
     /**
      * Returns the one-based task number for a task-targeting command.
      *
-     * @return one-based task number
+     * @return one-based task number.
      */
     public int getTaskNumber() {
         return this.taskNumber;
@@ -68,7 +68,7 @@ public class ParsedCommand {
     /**
      * Returns the task carried by an add command.
      *
-     * @return task to add
+     * @return task to add.
      */
     public Task getTask() {
         return this.task;

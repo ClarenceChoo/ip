@@ -1,5 +1,7 @@
 package choo;
 
+import java.nio.file.Path;
+
 import choo.exception.ChooException;
 import choo.parser.ParsedCommand;
 import choo.parser.Parser;
@@ -8,12 +10,10 @@ import choo.task.Task;
 import choo.task.TaskList;
 import choo.ui.Ui;
 
-import java.nio.file.Path;
-
 /**
  * Entry point for the CHOO chatbot.
  */
-public class CHOO {
+public class Choo {
     private final Storage storage;
     private final Ui ui;
     private TaskList tasks;
@@ -21,10 +21,10 @@ public class CHOO {
     /**
      * Creates CHOO with its persistence and user-interface collaborators.
      *
-     * @param storage storage used to load and save tasks
-     * @param ui user interface used for console interaction
+     * @param storage Storage used to load and save tasks.
+     * @param ui User interface used for console interaction.
      */
-    public CHOO(Storage storage, Ui ui) {
+    public Choo(Storage storage, Ui ui) {
         this.storage = storage;
         this.ui = ui;
     }
@@ -32,20 +32,20 @@ public class CHOO {
     /**
      * Starts the chatbot and processes commands until the user exits.
      *
-     * @param args command-line arguments; not used
+     * @param args Command-line arguments; not used.
      */
     public static void main(String[] args) {
         Storage storage = new Storage(Path.of("data", "choo.txt"));
-        new CHOO(storage, new Ui()).run();
+        new Choo(storage, new Ui()).run();
     }
 
     /**
      * Runs the chatbot using the supplied storage location.
      *
-     * @param storage storage used to load and save tasks
+     * @param storage Storage used to load and save tasks.
      */
     public static void run(Storage storage) {
-        new CHOO(storage, new Ui()).run();
+        new Choo(storage, new Ui()).run();
     }
 
     /**

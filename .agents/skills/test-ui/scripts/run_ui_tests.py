@@ -120,7 +120,7 @@ def run_case(repo_root: Path, classes_dir: Path, case: TestCase) -> bool:
             data_file.write_text(case.initial_data, encoding="utf-8")
 
         result = subprocess.run(
-            ["java", "-cp", str(classes_dir), "choo.CHOO"],
+            ["java", "-cp", str(classes_dir), "choo.Choo"],
             cwd=working_directory,
             input=case.input_text,
             capture_output=True,
