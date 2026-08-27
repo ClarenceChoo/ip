@@ -92,6 +92,12 @@ public class TaskList {
         return List.copyOf(this.tasks);
     }
 
+    /**
+     * Validates that a one-based task number identifies an existing task.
+     *
+     * @param taskNumber One-based task number to validate.
+     * @throws ChooException If the task number is outside the list.
+     */
     private void validateTaskNumber(int taskNumber) throws ChooException {
         if (taskNumber < 1 || taskNumber > this.tasks.size()) {
             throw invalidPosition(taskNumber);

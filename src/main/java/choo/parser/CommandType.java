@@ -4,10 +4,16 @@ package choo.parser;
  * Identifies the action represented by a parsed user command.
  */
 public enum CommandType {
+    /** Ends the current CHOO session. */
     BYE,
+    /** Displays every task. */
     LIST,
+    /** Marks a task as completed. */
     MARK,
+    /** Marks a task as incomplete. */
     UNMARK,
+    /** Removes a task. */
     DELETE,
+    /** Adds a new task. */
     ADD
 }

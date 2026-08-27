@@ -54,6 +54,15 @@ public class Parser {
         return command.equals(keyword) || command.startsWith(keyword + " ");
     }
 
+    /**
+     * Parses the one-based task position following a command keyword.
+     *
+     * @param command Complete trimmed command.
+     * @param keyword Command keyword preceding the position.
+     * @param type Command type to include in the result.
+     * @return Parsed task-targeting command.
+     * @throws ChooException If the position is not a whole number.
+     */
     private static ParsedCommand parseTaskNumber(String command, String keyword,
                                                   CommandType type) throws ChooException {
         String taskNumberText = command.substring(keyword.length()).trim();
@@ -66,6 +75,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a todo command and validates its description.
+     *
+     * @param command Complete trimmed todo command.
+     * @return Parsed add command carrying a todo.
+     * @throws ChooException If the description is empty.
+     */
     private static ParsedCommand parseTodo(String command) throws ChooException {
         String description = command.substring("todo".length()).trim();
         if (description.isEmpty()) {
@@ -74,6 +90,13 @@ public class Parser {
         return ParsedCommand.forNewTask(new Todo(description));
     }
 
+    /**
+     * Parses a deadline command and validates its description and due value.
+     *
+     * @param command Complete trimmed deadline command.
+     * @return Parsed add command carrying a deadline.
+     * @throws ChooException If required details or a valid date are missing.
+     */
     private static ParsedCommand parseDeadline(String command) throws ChooException {
         String taskDetails = command.substring("deadline".length()).trim();
         if (taskDetails.isEmpty()) {
@@ -101,6 +124,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses an event command and validates its description and time range.
+     *
+     * @param command Complete trimmed event command.
+     * @return Parsed add command carrying an event.
+     * @throws ChooException If required details are missing or misplaced.
+     */
     private static ParsedCommand parseEvent(String command) throws ChooException {
         String taskDetails = command.substring("event".length()).trim();
         if (taskDetails.isEmpty()) {
