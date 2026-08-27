@@ -1,3 +1,13 @@
+package choo;
+
+import choo.exception.ChooException;
+import choo.parser.ParsedCommand;
+import choo.parser.Parser;
+import choo.storage.Storage;
+import choo.task.Task;
+import choo.task.TaskList;
+import choo.ui.Ui;
+
 import java.nio.file.Path;
 
 /**

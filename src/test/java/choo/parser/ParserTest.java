@@ -1,3 +1,7 @@
+package choo.parser;
+
+import choo.exception.ChooException;
+
 /**
  * Checks conversion of raw user input into structured commands.
  */

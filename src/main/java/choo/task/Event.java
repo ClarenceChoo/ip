@@ -1,3 +1,5 @@
+package choo.task;
+
 /**
  * Represents a task that takes place between two dates or times.
  */

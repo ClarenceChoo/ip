@@ -1,3 +1,5 @@
+package choo.parser;
+
 /**
  * Identifies the action represented by a parsed user command.
  */

@@ -1,3 +1,5 @@
+package choo.exception;
+
 /**
  * Represents an error that CHOO can explain to the user.
  */
