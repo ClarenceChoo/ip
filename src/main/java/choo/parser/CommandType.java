@@ -14,6 +14,8 @@ public enum CommandType {
     UNMARK,
     /** Removes a task. */
     DELETE,
+    /** Finds tasks containing a keyword. */
+    FIND,
     /** Adds a new task. */
     ADD
 }

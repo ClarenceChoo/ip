@@ -335,3 +335,70 @@ ____________________________________________________________
 Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+## Test case: Find matching task descriptions
+
+Aim: Verify ordered, case-sensitive, description-only searches, empty results, and invalid find commands.
+
+Input:
+```text
+todo read book
+deadline return book /by 2019-12-06
+event book club /from Monday /to Tuesday
+todo BOOK notes
+find book
+find 2019
+find BOOK
+find
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] return book (by: Dec 6 2019)
+Now you have 2 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [E][ ] book club (from: Monday to: Tuesday)
+Now you have 3 tasks in the list.
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] BOOK notes
+Now you have 4 tasks in the list.
+____________________________________________________________
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: Dec 6 2019)
+3.[E][ ] book club (from: Monday to: Tuesday)
+____________________________________________________________
+Here are the matching tasks in your list:
+____________________________________________________________
+Here are the matching tasks in your list:
+1.[T][ ] BOOK notes
+____________________________________________________________
+OOPS!!! A find command needs a keyword.
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: Dec 6 2019)
+3.[E][ ] book club (from: Monday to: Tuesday)
+4.[T][ ] BOOK notes
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```

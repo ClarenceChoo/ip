@@ -76,10 +76,25 @@ public class Ui {
      */
     public void showTaskList(List<Task> tasks) {
         this.output.println("Here are the tasks in your list:");
+        showNumberedTasks(tasks);
+        showLine();
+    }
+
+    /**
+     * Displays tasks whose descriptions match a search keyword.
+     *
+     * @param tasks Matching tasks to display.
+     */
+    public void showMatchingTasks(List<Task> tasks) {
+        this.output.println("Here are the matching tasks in your list:");
+        showNumberedTasks(tasks);
+        showLine();
+    }
+
+    private void showNumberedTasks(List<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             this.output.println((i + 1) + "." + tasks.get(i));
         }
-        showLine();
     }
 
     /**

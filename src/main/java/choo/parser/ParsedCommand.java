@@ -9,11 +9,13 @@ public class ParsedCommand {
     private final CommandType type;
     private final int taskNumber;
     private final Task task;
+    private final String keyword;
 
-    private ParsedCommand(CommandType type, int taskNumber, Task task) {
+    private ParsedCommand(CommandType type, int taskNumber, Task task, String keyword) {
         this.type = type;
         this.taskNumber = taskNumber;
         this.task = task;
+        this.keyword = keyword;
     }
 
     /**
@@ -23,7 +25,7 @@ public class ParsedCommand {
      * @return parsed command.
      */
     public static ParsedCommand withoutDetails(CommandType type) {
-        return new ParsedCommand(type, 0, null);
+        return new ParsedCommand(type, 0, null, null);
     }
 
     /**
@@ -34,7 +36,7 @@ public class ParsedCommand {
      * @return parsed command.
      */
     public static ParsedCommand forTaskNumber(CommandType type, int taskNumber) {
-        return new ParsedCommand(type, taskNumber, null);
+        return new ParsedCommand(type, taskNumber, null, null);
     }
 
     /**
@@ -44,7 +46,17 @@ public class ParsedCommand {
      * @return parsed command.
      */
     public static ParsedCommand forNewTask(Task task) {
-        return new ParsedCommand(CommandType.ADD, 0, task);
+        return new ParsedCommand(CommandType.ADD, 0, task, null);
+    }
+
+    /**
+     * Creates a command that searches task descriptions.
+     *
+     * @param keyword Keyword to search for.
+     * @return Parsed find command.
+     */
+    public static ParsedCommand forKeyword(String keyword) {
+        return new ParsedCommand(CommandType.FIND, 0, null, keyword);
     }
 
     /**
@@ -72,5 +84,14 @@ public class ParsedCommand {
      */
     public Task getTask() {
         return this.task;
+    }
+
+    /**
+     * Returns the keyword carried by a find command.
+     *
+     * @return Search keyword.
+     */
+    public String getKeyword() {
+        return this.keyword;
     }
 }

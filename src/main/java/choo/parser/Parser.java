@@ -38,6 +38,9 @@ public class Parser {
         if (isCommand(trimmedCommand, "delete")) {
             return parseTaskNumber(trimmedCommand, "delete", CommandType.DELETE);
         }
+        if (isCommand(trimmedCommand, "find")) {
+            return parseFind(trimmedCommand);
+        }
         if (isCommand(trimmedCommand, "todo")) {
             return parseTodo(trimmedCommand);
         }
@@ -88,6 +91,21 @@ public class Parser {
             throw new ChooException("A todo needs a description.");
         }
         return ParsedCommand.forNewTask(new Todo(description));
+    }
+
+    /**
+     * Parses a find command and validates its keyword.
+     *
+     * @param command Complete trimmed find command.
+     * @return Parsed find command carrying a keyword.
+     * @throws ChooException If the keyword is empty.
+     */
+    private static ParsedCommand parseFind(String command) throws ChooException {
+        String keyword = command.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new ChooException("A find command needs a keyword.");
+        }
+        return ParsedCommand.forKeyword(keyword);
     }
 
     /**

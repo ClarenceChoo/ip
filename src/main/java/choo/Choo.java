@@ -97,6 +97,9 @@ public class Choo {
         case DELETE:
             deleteTask(parsedCommand.getTaskNumber());
             return false;
+        case FIND:
+            this.ui.showMatchingTasks(this.tasks.find(parsedCommand.getKeyword()));
+            return false;
         case ADD:
             addTask(parsedCommand.getTask());
             return false;

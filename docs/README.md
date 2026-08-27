@@ -87,6 +87,22 @@ Example: `delete 2`
 
 The remaining tasks are renumbered automatically.
 
+## Finding tasks
+
+Use `find KEYWORD` to display tasks whose descriptions contain `KEYWORD`.
+Matching is case-sensitive, and results keep the same order as the task list.
+Dates, times, and task markers are not searched.
+
+Example: `find book`
+
+Example output:
+
+```text
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][X] return book (by: Dec 2 2019)
+```
+
 ## Handling invalid commands
 
 CHOO explains invalid commands and missing task details without changing your

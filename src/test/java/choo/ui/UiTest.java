@@ -29,6 +29,7 @@ public class UiTest {
 
         ui.showWelcome();
         ui.showTaskList(List.of(new Todo("read book")));
+        ui.showMatchingTasks(List.of(new Todo("return book")));
         ui.showError("bad command");
         ui.showBye();
 
@@ -44,6 +45,9 @@ public class UiTest {
                 + separator
                 + "Here are the tasks in your list:\n"
                 + "1.[T][ ] read book\n"
+                + separator
+                + "Here are the matching tasks in your list:\n"
+                + "1.[T][ ] return book\n"
                 + separator
                 + "OOPS!!! bad command\n"
                 + separator
