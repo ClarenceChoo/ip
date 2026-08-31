@@ -68,8 +68,7 @@ public class ParserTest {
     }
 
     private static void assertError(String input, String expectedMessage) {
-        ChooException exception = assertThrows(ChooException.class,
-                () -> Parser.parse(input));
+        ChooException exception = assertThrows(ChooException.class, () -> Parser.parse(input));
         assertEquals(expectedMessage, exception.getMessage());
     }
 }

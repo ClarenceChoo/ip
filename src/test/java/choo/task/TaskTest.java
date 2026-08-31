@@ -59,8 +59,7 @@ public class TaskTest {
             "-0001-01-01"
         };
         for (String invalidDate : invalidDates) {
-            assertThrows(DateTimeParseException.class,
-                    () -> new Deadline("invalid", invalidDate), invalidDate);
+            assertThrows(DateTimeParseException.class, () -> new Deadline("invalid", invalidDate), invalidDate);
         }
     }
 }
