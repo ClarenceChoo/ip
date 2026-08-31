@@ -51,8 +51,7 @@ public class TaskListTest {
         TaskList tasks = new TaskList(List.of(new Todo("only")));
         assertInvalidPosition(tasks, 0);
         assertInvalidPosition(tasks, 2);
-        ChooException addException = assertThrows(ChooException.class,
-                () -> tasks.add(3, new Todo("invalid")));
+        ChooException addException = assertThrows(ChooException.class, () -> tasks.add(3, new Todo("invalid")));
         assertEquals("Task number 3 is outside the list.", addException.getMessage());
     }
 
@@ -84,8 +83,7 @@ public class TaskListTest {
     }
 
     private static void assertInvalidPosition(TaskList tasks, int taskNumber) {
-        ChooException exception = assertThrows(ChooException.class,
-                () -> tasks.get(taskNumber));
+        ChooException exception = assertThrows(ChooException.class, () -> tasks.get(taskNumber));
         assertEquals("Task number " + taskNumber + " is outside the list.",
                 exception.getMessage());
     }
