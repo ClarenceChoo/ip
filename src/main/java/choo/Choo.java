@@ -11,7 +11,7 @@ import choo.task.TaskList;
 import choo.ui.Ui;
 
 /**
- * Entry point for the CHOO chatbot.
+ * Coordinates the CHOO chatbot's command-processing workflow.
  */
 public class Choo {
     private final Storage storage;
@@ -82,29 +82,29 @@ public class Choo {
      */
     private boolean executeCommand(ParsedCommand parsedCommand) throws ChooException {
         switch (parsedCommand.getType()) {
-        case BYE:
-            this.ui.showBye();
-            return true;
-        case LIST:
-            this.ui.showTaskList(this.tasks.asList());
-            return false;
-        case MARK:
-            updateTaskStatus(parsedCommand.getTaskNumber(), true);
-            return false;
-        case UNMARK:
-            updateTaskStatus(parsedCommand.getTaskNumber(), false);
-            return false;
-        case DELETE:
-            deleteTask(parsedCommand.getTaskNumber());
-            return false;
-        case FIND:
-            this.ui.showMatchingTasks(this.tasks.find(parsedCommand.getKeyword()));
-            return false;
-        case ADD:
-            addTask(parsedCommand.getTask());
-            return false;
-        default:
-            throw new AssertionError("Unhandled command type: " + parsedCommand.getType());
+            case BYE:
+                this.ui.showBye();
+                return true;
+            case LIST:
+                this.ui.showTaskList(this.tasks.asList());
+                return false;
+            case MARK:
+                updateTaskStatus(parsedCommand.getTaskNumber(), true);
+                return false;
+            case UNMARK:
+                updateTaskStatus(parsedCommand.getTaskNumber(), false);
+                return false;
+            case DELETE:
+                deleteTask(parsedCommand.getTaskNumber());
+                return false;
+            case FIND:
+                this.ui.showMatchingTasks(this.tasks.find(parsedCommand.getKeyword()));
+                return false;
+            case ADD:
+                addTask(parsedCommand.getTask());
+                return false;
+            default:
+                throw new AssertionError("Unhandled command type: " + parsedCommand.getType());
         }
     }
 

@@ -67,7 +67,7 @@ public class Parser {
      * @throws ChooException If the position is not a whole number.
      */
     private static ParsedCommand parseTaskNumber(String command, String keyword,
-                                                  CommandType type) throws ChooException {
+            CommandType type) throws ChooException {
         String taskNumberText = command.substring(keyword.length()).trim();
         try {
             int taskNumber = Integer.parseInt(taskNumberText);
