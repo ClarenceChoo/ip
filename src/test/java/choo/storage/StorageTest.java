@@ -39,9 +39,9 @@ public class StorageTest {
         Storage storage = new Storage(dataFile);
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Todo("read book"));
-        Task deadline = new Deadline("return book", "2019-12-06 1700");
-        deadline.markAsDone();
-        tasks.add(deadline);
+        Task returnBookDeadline = new Deadline("return book", "2019-12-06 1700");
+        returnBookDeadline.markAsDone();
+        tasks.add(returnBookDeadline);
         tasks.add(new Event("project meeting", "Monday 2pm", "4pm"));
 
         storage.save(tasks);

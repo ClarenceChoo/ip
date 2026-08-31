@@ -19,39 +19,39 @@ public class ParserTest {
 
     @Test
     void parse_taskNumberCommand_returnsOneBasedPosition() throws ChooException {
-        ParsedCommand mark = Parser.parse("mark 12");
-        assertEquals(CommandType.MARK, mark.getType());
-        assertEquals(12, mark.getTaskNumber());
+        ParsedCommand markCommand = Parser.parse("mark 12");
+        assertEquals(CommandType.MARK, markCommand.getType());
+        assertEquals(12, markCommand.getTaskNumber());
         assertEquals(CommandType.UNMARK, Parser.parse("unmark 2").getType());
         assertEquals(CommandType.DELETE, Parser.parse("delete 3").getType());
     }
 
     @Test
     void parse_todoCommand_returnsTodoTask() throws ChooException {
-        ParsedCommand todo = Parser.parse("todo read book");
-        assertEquals(CommandType.ADD, todo.getType());
-        assertEquals("[T][ ] read book", todo.getTask().toString());
+        ParsedCommand todoCommand = Parser.parse("todo read book");
+        assertEquals(CommandType.ADD, todoCommand.getType());
+        assertEquals("[T][ ] read book", todoCommand.getTask().toString());
     }
 
     @Test
     void parse_deadlineCommand_returnsFormattedDeadline() throws ChooException {
-        ParsedCommand deadline = Parser.parse("deadline submit /by 2019-12-02 1800");
+        ParsedCommand deadlineCommand = Parser.parse("deadline submit /by 2019-12-02 1800");
         assertEquals("[D][ ] submit (by: Dec 2 2019, 6:00PM)",
-                deadline.getTask().toString());
+                deadlineCommand.getTask().toString());
     }
 
     @Test
     void parse_eventCommand_returnsEventWithRange() throws ChooException {
-        ParsedCommand event = Parser.parse("event meeting /from Mon /to Tue");
-        assertEquals("[E][ ] meeting (from: Mon to: Tue)", event.getTask().toString());
+        ParsedCommand eventCommand = Parser.parse("event meeting /from Mon /to Tue");
+        assertEquals("[E][ ] meeting (from: Mon to: Tue)", eventCommand.getTask().toString());
     }
 
     @Test
     void parse_findCommand_returnsKeyword() throws ChooException {
-        ParsedCommand find = Parser.parse("  find project book  ");
+        ParsedCommand findCommand = Parser.parse("  find project book  ");
 
-        assertEquals(CommandType.FIND, find.getType());
-        assertEquals("project book", find.getKeyword());
+        assertEquals(CommandType.FIND, findCommand.getType());
+        assertEquals("project book", findCommand.getKeyword());
     }
 
     @Test

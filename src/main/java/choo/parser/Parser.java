@@ -121,21 +121,21 @@ public class Parser {
             throw new ChooException("A deadline needs a description.");
         }
 
-        int byIndex = taskDetails.indexOf("/by");
-        if (byIndex < 0) {
+        int byDelimiterIndex = taskDetails.indexOf("/by");
+        if (byDelimiterIndex < 0) {
             throw new ChooException("A deadline needs a /by date or time.");
         }
 
-        String description = taskDetails.substring(0, byIndex).trim();
-        String by = taskDetails.substring(byIndex + 3).trim();
+        String description = taskDetails.substring(0, byDelimiterIndex).trim();
+        String dueDateTimeText = taskDetails.substring(byDelimiterIndex + 3).trim();
         if (description.isEmpty()) {
             throw new ChooException("A deadline needs a description.");
         }
-        if (by.isEmpty()) {
+        if (dueDateTimeText.isEmpty()) {
             throw new ChooException("A deadline needs a /by date or time.");
         }
         try {
-            return ParsedCommand.forNewTask(new Deadline(description, by));
+            return ParsedCommand.forNewTask(new Deadline(description, dueDateTimeText));
         } catch (DateTimeParseException exception) {
             throw new ChooException(
                     "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
@@ -155,21 +155,22 @@ public class Parser {
             throw new ChooException("An event needs a description.");
         }
 
-        int fromIndex = taskDetails.indexOf("/from");
-        int toIndex = taskDetails.indexOf("/to");
-        if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
+        int fromDelimiterIndex = taskDetails.indexOf("/from");
+        int toDelimiterIndex = taskDetails.indexOf("/to");
+        if (fromDelimiterIndex < 0 || toDelimiterIndex < 0
+                || toDelimiterIndex <= fromDelimiterIndex) {
             throw new ChooException("An event needs both /from and /to values.");
         }
 
-        String description = taskDetails.substring(0, fromIndex).trim();
-        String from = taskDetails.substring(fromIndex + 5, toIndex).trim();
-        String to = taskDetails.substring(toIndex + 3).trim();
+        String description = taskDetails.substring(0, fromDelimiterIndex).trim();
+        String startText = taskDetails.substring(fromDelimiterIndex + 5, toDelimiterIndex).trim();
+        String endText = taskDetails.substring(toDelimiterIndex + 3).trim();
         if (description.isEmpty()) {
             throw new ChooException("An event needs a description.");
         }
-        if (from.isEmpty() || to.isEmpty()) {
+        if (startText.isEmpty() || endText.isEmpty()) {
             throw new ChooException("An event needs both /from and /to values.");
         }
-        return ParsedCommand.forNewTask(new Event(description, from, to));
+        return ParsedCommand.forNewTask(new Event(description, startText, endText));
     }
 }

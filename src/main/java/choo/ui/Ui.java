@@ -62,11 +62,11 @@ public class Ui {
      * Displays the CHOO banner and greeting.
      */
     public void showWelcome() {
-        showLine();
+        showSeparator();
         this.output.print(BANNER);
         this.output.println("Hello! I'm CHOO.");
         this.output.println("What can I do for you?");
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -77,7 +77,7 @@ public class Ui {
     public void showTaskList(List<Task> tasks) {
         this.output.println("Here are the tasks in your list:");
         showNumberedTasks(tasks);
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -88,7 +88,7 @@ public class Ui {
     public void showMatchingTasks(List<Task> tasks) {
         this.output.println("Here are the matching tasks in your list:");
         showNumberedTasks(tasks);
-        showLine();
+        showSeparator();
     }
 
     private void showNumberedTasks(List<Task> tasks) {
@@ -107,7 +107,7 @@ public class Ui {
         this.output.println("Got it. I've added this task:");
         this.output.println("  " + task);
         showTaskCount(taskCount);
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -120,7 +120,7 @@ public class Ui {
         this.output.println("Noted. I've removed this task:");
         this.output.println("  " + task);
         showTaskCount(taskCount);
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -136,7 +136,7 @@ public class Ui {
             this.output.println("OK, I've marked this task as not done yet:");
         }
         this.output.println("  " + task);
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -146,7 +146,7 @@ public class Ui {
      */
     public void showError(String message) {
         this.output.println("OOPS!!! " + message);
-        showLine();
+        showSeparator();
     }
 
     /**
@@ -154,14 +154,14 @@ public class Ui {
      */
     public void showBye() {
         this.output.println("Bye. Hope to see you again soon!");
-        showLine();
+        showSeparator();
     }
 
     private void showTaskCount(int taskCount) {
         this.output.println("Now you have " + taskCount + " tasks in the list.");
     }
 
-    private void showLine() {
+    private void showSeparator() {
         this.output.println(SEPARATOR);
     }
 }

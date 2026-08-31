@@ -31,7 +31,7 @@ public class TaskTest {
                 midnightDeadline.toString());
         assertEquals("[D][ ] leap day (by: Feb 29 2020, 11:59PM)",
                 leapDayDeadline.toString());
-        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0), deadline.getBy());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0), deadline.getDueDateTime());
         assertEquals("[E][ ] project meeting (from: Mon 2pm to: 4pm)", event.toString());
     }
 
@@ -58,9 +58,9 @@ public class TaskTest {
             "+12345-01-01",
             "-0001-01-01"
         };
-        for (String by : invalidDates) {
+        for (String invalidDate : invalidDates) {
             assertThrows(DateTimeParseException.class,
-                    () -> new Deadline("invalid", by), by);
+                    () -> new Deadline("invalid", invalidDate), invalidDate);
         }
     }
 }

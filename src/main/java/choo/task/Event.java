@@ -4,20 +4,20 @@ package choo.task;
  * Represents a task that takes place between two dates or times.
  */
 public class Event extends Task {
-    private final String from;
-    private final String to;
+    private final String startText;
+    private final String endText;
 
     /**
      * Creates an incomplete Event with its start and end text.
      *
      * @param description description of the task.
-     * @param from start date or time as entered by the user.
-     * @param to end date or time as entered by the user.
+     * @param startText Start date or time as entered by the user.
+     * @param endText End date or time as entered by the user.
      */
-    public Event(String description, String from, String to) {
+    public Event(String description, String startText, String endText) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.startText = startText;
+        this.endText = endText;
     }
 
     /**
@@ -25,8 +25,8 @@ public class Event extends Task {
      *
      * @return event start text.
      */
-    public String getFrom() {
-        return this.from;
+    public String getStartText() {
+        return this.startText;
     }
 
     /**
@@ -34,8 +34,8 @@ public class Event extends Task {
      *
      * @return event end text.
      */
-    public String getTo() {
-        return this.to;
+    public String getEndText() {
+        return this.endText;
     }
 
     /**
@@ -46,6 +46,6 @@ public class Event extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString()
-                + " (from: " + this.from + " to: " + this.to + ")";
+                + " (from: " + this.startText + " to: " + this.endText + ")";
     }
 }

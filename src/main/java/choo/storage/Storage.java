@@ -49,10 +49,10 @@ public class Storage {
         }
 
         try {
-            List<String> lines = Files.readAllLines(this.dataFile, StandardCharsets.UTF_8);
+            List<String> taskLines = Files.readAllLines(this.dataFile, StandardCharsets.UTF_8);
             List<Task> tasks = new ArrayList<>();
-            for (int i = 0; i < lines.size(); i++) {
-                tasks.add(parseTask(lines.get(i), i + 1));
+            for (int i = 0; i < taskLines.size(); i++) {
+                tasks.add(parseTask(taskLines.get(i), i + 1));
             }
             return tasks;
         } catch (IOException exception) {
@@ -67,20 +67,20 @@ public class Storage {
      * @throws ChooException if the data file cannot be written.
      */
     public void save(List<Task> tasks) throws ChooException {
-        List<String> lines = new ArrayList<>();
+        List<String> taskLines = new ArrayList<>();
         for (Task task : tasks) {
-            lines.add(formatTask(task));
+            taskLines.add(formatTask(task));
         }
 
         Path temporaryFile = null;
         try {
-            Path parent = this.dataFile.getParent();
-            if (parent != null) {
-                Files.createDirectories(parent);
+            Path parentDirectory = this.dataFile.getParent();
+            if (parentDirectory != null) {
+                Files.createDirectories(parentDirectory);
             }
             temporaryFile = this.dataFile.resolveSibling(
                     this.dataFile.getFileName() + ".tmp");
-            Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
+            Files.write(temporaryFile, taskLines, StandardCharsets.UTF_8);
             replaceDataFile(temporaryFile);
         } catch (IOException exception) {
             if (temporaryFile != null) {
@@ -104,22 +104,22 @@ public class Storage {
      * @return One complete storage line.
      */
     private static String formatTask(Task task) {
-        String status = task.isDone() ? "1" : "0";
+        String completionFlag = task.isDone() ? "1" : "0";
         String description = escape(task.getDescription());
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            DateTimeFormatter storageFormat = deadline.hasTime()
+            DateTimeFormatter deadlineStorageFormat = deadline.hasExplicitTime()
                     ? STORED_DEADLINE_DATE_TIME_FORMAT : STORED_DEADLINE_DATE_FORMAT;
-            return "D | " + status + " | " + description
-                    + " | " + deadline.getBy().format(storageFormat);
+            return "D | " + completionFlag + " | " + description
+                    + " | " + deadline.getDueDateTime().format(deadlineStorageFormat);
         }
         if (task instanceof Event) {
             Event event = (Event) task;
-            return "E | " + status + " | " + description
-                    + " | " + escape(event.getFrom())
-                    + " | " + escape(event.getTo());
+            return "E | " + completionFlag + " | " + description
+                    + " | " + escape(event.getStartText())
+                    + " | " + escape(event.getEndText());
         }
-        return "T | " + status + " | " + description;
+        return "T | " + completionFlag + " | " + description;
     }
 
     /**
@@ -137,16 +137,16 @@ public class Storage {
         }
 
         Task task;
-        String type = fields.get(0);
-        if (type.equals("T") && fields.size() == 3) {
+        String taskTypeCode = fields.get(0);
+        if (taskTypeCode.equals("T") && fields.size() == 3) {
             task = new Todo(fields.get(2));
-        } else if (type.equals("D") && fields.size() == 4) {
+        } else if (taskTypeCode.equals("D") && fields.size() == 4) {
             try {
                 task = new Deadline(fields.get(2), fields.get(3));
             } catch (DateTimeParseException exception) {
                 throw unsupportedDeadlineData(lineNumber);
             }
-        } else if (type.equals("E") && fields.size() == 5) {
+        } else if (taskTypeCode.equals("E") && fields.size() == 5) {
             task = new Event(fields.get(2), fields.get(3), fields.get(4));
         } else {
             throw corruptedData(lineNumber);
@@ -174,7 +174,7 @@ public class Storage {
     private static List<String> splitEscapedFields(String line, int lineNumber)
             throws ChooException {
         List<String> fields = new ArrayList<>();
-        StringBuilder field = new StringBuilder();
+        StringBuilder currentField = new StringBuilder();
         boolean isEscaped = false;
         for (int i = 0; i < line.length(); i++) {
             char character = line.charAt(i);
@@ -182,21 +182,21 @@ public class Storage {
                 if (character != '\\' && character != '|') {
                     throw corruptedData(lineNumber);
                 }
-                field.append(character);
+                currentField.append(character);
                 isEscaped = false;
             } else if (character == '\\') {
                 isEscaped = true;
             } else if (character == '|') {
-                fields.add(field.toString().trim());
-                field.setLength(0);
+                fields.add(currentField.toString().trim());
+                currentField.setLength(0);
             } else {
-                field.append(character);
+                currentField.append(character);
             }
         }
         if (isEscaped) {
             throw corruptedData(lineNumber);
         }
-        fields.add(field.toString().trim());
+        fields.add(currentField.toString().trim());
         return fields;
     }
 
