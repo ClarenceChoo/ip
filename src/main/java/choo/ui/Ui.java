@@ -75,9 +75,7 @@ public class Ui {
      * @param tasks tasks to display.
      */
     public void showTaskList(List<Task> tasks) {
-        this.output.println("Here are the tasks in your list:");
-        showNumberedTasks(tasks);
-        showSeparator();
+        showResponse(formatTaskList(tasks));
     }
 
     /**
@@ -86,15 +84,15 @@ public class Ui {
      * @param tasks Matching tasks to display.
      */
     public void showMatchingTasks(List<Task> tasks) {
-        this.output.println("Here are the matching tasks in your list:");
-        showNumberedTasks(tasks);
-        showSeparator();
+        showResponse(formatMatchingTasks(tasks));
     }
 
-    private void showNumberedTasks(List<Task> tasks) {
+    private String formatNumberedTasks(List<Task> tasks) {
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
-            this.output.println((i + 1) + "." + tasks.get(i));
+            result.append(i + 1).append('.').append(tasks.get(i)).append(System.lineSeparator());
         }
+        return result.toString();
     }
 
     /**
@@ -104,10 +102,7 @@ public class Ui {
      * @param taskCount number of tasks after adding.
      */
     public void showAddedTask(Task task, int taskCount) {
-        this.output.println("Got it. I've added this task:");
-        this.output.println("  " + task);
-        showTaskCount(taskCount);
-        showSeparator();
+        showResponse(formatAddedTask(task, taskCount));
     }
 
     /**
@@ -117,10 +112,7 @@ public class Ui {
      * @param taskCount number of tasks after deleting.
      */
     public void showDeletedTask(Task task, int taskCount) {
-        this.output.println("Noted. I've removed this task:");
-        this.output.println("  " + task);
-        showTaskCount(taskCount);
-        showSeparator();
+        showResponse(formatDeletedTask(task, taskCount));
     }
 
     /**
@@ -130,13 +122,7 @@ public class Ui {
      * @param isMarked true if the task was marked done.
      */
     public void showTaskStatusChanged(Task task, boolean isMarked) {
-        if (isMarked) {
-            this.output.println("Nice! I've marked this task as done:");
-        } else {
-            this.output.println("OK, I've marked this task as not done yet:");
-        }
-        this.output.println("  " + task);
-        showSeparator();
+        showResponse(formatTaskStatusChanged(task, isMarked));
     }
 
     /**
@@ -145,20 +131,114 @@ public class Ui {
      * @param message error details.
      */
     public void showError(String message) {
-        this.output.println("OOPS!!! " + message);
-        showSeparator();
+        showResponse(formatError(message));
     }
 
     /**
      * Displays the farewell message.
      */
     public void showBye() {
-        this.output.println("Bye. Hope to see you again soon!");
+        showResponse(formatBye());
+    }
+
+    /**
+     * Displays a complete response followed by the console separator.
+     *
+     * @param response Response to display.
+     */
+    public void showResponse(String response) {
+        this.output.println(response);
         showSeparator();
     }
 
-    private void showTaskCount(int taskCount) {
-        this.output.println("Now you have " + taskCount + " tasks in the list.");
+    /**
+     * Formats all tasks with one-based task numbers.
+     *
+     * @param tasks Tasks to format.
+     * @return Complete task-list response.
+     */
+    public String formatTaskList(List<Task> tasks) {
+        return formatTaskCollection("Here are the tasks in your list:", tasks);
+    }
+
+    /**
+     * Formats tasks that match a search keyword.
+     *
+     * @param tasks Matching tasks to format.
+     * @return Complete search-result response.
+     */
+    public String formatMatchingTasks(List<Task> tasks) {
+        return formatTaskCollection("Here are the matching tasks in your list:", tasks);
+    }
+
+    /**
+     * Formats confirmation that a task was added.
+     *
+     * @param task Added task.
+     * @param taskCount Number of tasks after adding.
+     * @return Complete addition response.
+     */
+    public String formatAddedTask(Task task, int taskCount) {
+        return "Got it. I've added this task:" + System.lineSeparator()
+                + "  " + task + System.lineSeparator()
+                + formatTaskCount(taskCount);
+    }
+
+    /**
+     * Formats confirmation that a task was deleted.
+     *
+     * @param task Deleted task.
+     * @param taskCount Number of tasks after deleting.
+     * @return Complete deletion response.
+     */
+    public String formatDeletedTask(Task task, int taskCount) {
+        return "Noted. I've removed this task:" + System.lineSeparator()
+                + "  " + task + System.lineSeparator()
+                + formatTaskCount(taskCount);
+    }
+
+    /**
+     * Formats confirmation that a task's completion status changed.
+     *
+     * @param task Updated task.
+     * @param isMarked Whether the task was marked as completed.
+     * @return Complete status-change response.
+     */
+    public String formatTaskStatusChanged(Task task, boolean isMarked) {
+        String summary = isMarked
+                ? "Nice! I've marked this task as done:"
+                : "OK, I've marked this task as not done yet:";
+        return summary + System.lineSeparator() + "  " + task;
+    }
+
+    /**
+     * Formats a user-facing error.
+     *
+     * @param message Error details.
+     * @return Complete error response.
+     */
+    public String formatError(String message) {
+        return "OOPS!!! " + message;
+    }
+
+    /**
+     * Formats the farewell response.
+     *
+     * @return Farewell response.
+     */
+    public String formatBye() {
+        return "Bye. Hope to see you again soon!";
+    }
+
+    private String formatTaskCount(int taskCount) {
+        return "Now you have " + taskCount + " tasks in the list.";
+    }
+
+    private String formatTaskCollection(String heading, List<Task> tasks) {
+        String numberedTasks = formatNumberedTasks(tasks).stripTrailing();
+        return numberedTasks.isEmpty()
+                ? heading
+                : heading + System.lineSeparator() + numberedTasks;
     }
 
     private void showSeparator() {

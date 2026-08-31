@@ -1,5 +1,6 @@
 package choo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,11 +14,30 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import choo.storage.Storage;
+import choo.ui.Ui;
 
 /**
  * Checks the user-visible behavior of the CHOO command-line interface.
  */
 public class ChooTest {
+    @Test
+    void getResponse_sequentialGuiCommands_preservesStateAndFormatsReplies() throws Exception {
+        Path dataFile = Files.createTempDirectory("choo-gui-response-test-")
+                .resolve("data").resolve("choo.txt");
+        Choo choo = new Choo(new Storage(dataFile), new Ui());
+        String lineSeparator = System.lineSeparator();
+
+        assertEquals("Got it. I've added this task:" + lineSeparator
+                + "  [T][ ] read book" + lineSeparator
+                + "Now you have 1 tasks in the list.", choo.getResponse("todo read book"));
+        assertEquals("Nice! I've marked this task as done:" + lineSeparator
+                + "  [T][X] read book", choo.getResponse("mark 1"));
+        assertEquals("Here are the tasks in your list:" + lineSeparator
+                + "1.[T][X] read book", choo.getResponse("list"));
+        assertEquals("OOPS!!! Task number 2 is outside the list.", choo.getResponse("delete 2"));
+        assertEquals("Bye. Hope to see you again soon!", choo.getResponse("bye"));
+    }
+
     @Test
     void run_mixedValidAndInvalidCommands_preservesCorrectTaskState() throws Exception {
         String input = "todo\n"

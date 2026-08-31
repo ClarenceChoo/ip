@@ -1,8 +1,9 @@
 # CHOO User Guide
 
-CHOO is a command-line chatbot that keeps track of your tasks.
+CHOO is a desktop chatbot that keeps track of your tasks.
 
-Enter one command at a time and press Enter. Enter `bye` when you want to exit.
+Enter one command at a time in the text field, then press Enter or click
+**Send**. Enter `bye` or close the window when you want to exit.
 
 CHOO saves the task list automatically after every successful change and
 loads it the next time the chatbot starts. Data is stored relative to the
@@ -111,4 +112,5 @@ of crashing. Correct the command or data-file problem and try again.
 
 ## Exiting CHOO
 
-Use `bye` to end the session.
+Use `bye` to close the window. You can also use the window's normal close
+button.
