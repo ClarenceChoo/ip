@@ -1,6 +1,7 @@
 package choo.task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import choo.exception.ChooException;
@@ -16,6 +17,15 @@ public class TaskList {
      */
     public TaskList() {
         this(List.of());
+    }
+
+    /**
+     * Creates a task list containing the supplied tasks in order.
+     *
+     * @param tasks Initial tasks.
+     */
+    public TaskList(Task... tasks) {
+        this(Arrays.asList(tasks));
     }
 
     /**
