@@ -15,6 +15,17 @@ import choo.exception.ChooException;
  */
 public class TaskListTest {
     @Test
+    void varargsConstructor_multipleTasks_preservesOrder() throws ChooException {
+        TaskList tasks = new TaskList(
+                new Todo("first"), new Todo("second"), new Todo("third"));
+
+        assertEquals(3, tasks.size());
+        assertEquals("[T][ ] first", tasks.get(1).toString());
+        assertEquals("[T][ ] second", tasks.get(2).toString());
+        assertEquals("[T][ ] third", tasks.get(3).toString());
+    }
+
+    @Test
     void constructor_sourceListChanges_doesNotChangeTaskList() throws ChooException {
         List<Task> initialTasks = new ArrayList<>();
         initialTasks.add(new Todo("first"));
