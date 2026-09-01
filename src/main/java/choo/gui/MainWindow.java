@@ -1,24 +1,22 @@
 package choo.gui;
 
+import java.net.URL;
+
 import choo.Choo;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 /**
  * Controls the main CHOO chat window defined in FXML.
  */
 public class MainWindow extends AnchorPane {
-    private static final int AVATAR_SIZE = 64;
-    private static final Image USER_IMAGE = createAvatar(Color.web("#4A90E2"));
-    private static final Image CHOO_IMAGE = createAvatar(Color.web("#50A684"));
+    private static final Image USER_IMAGE = loadImage("/images/UserAvatar.png");
+    private static final Image CHOO_IMAGE = loadImage("/images/ChooAvatar.png");
 
     @FXML
     private ScrollPane scrollPane;
@@ -68,20 +66,11 @@ public class MainWindow extends AnchorPane {
         }
     }
 
-    private static Image createAvatar(Color color) {
-        WritableImage image = new WritableImage(AVATAR_SIZE, AVATAR_SIZE);
-        PixelWriter pixels = image.getPixelWriter();
-        double center = (AVATAR_SIZE - 1) / 2.0;
-        double radiusSquared = center * center;
-        for (int y = 0; y < AVATAR_SIZE; y++) {
-            for (int x = 0; x < AVATAR_SIZE; x++) {
-                double horizontalDistance = x - center;
-                double verticalDistance = y - center;
-                boolean isInsideCircle = horizontalDistance * horizontalDistance
-                        + verticalDistance * verticalDistance <= radiusSquared;
-                pixels.setColor(x, y, isInsideCircle ? color : Color.TRANSPARENT);
-            }
+    private static Image loadImage(String resourcePath) {
+        URL imageUrl = MainWindow.class.getResource(resourcePath);
+        if (imageUrl == null) {
+            throw new IllegalStateException("Unable to load GUI image: " + resourcePath);
         }
-        return image;
+        return new Image(imageUrl.toExternalForm());
     }
 }
