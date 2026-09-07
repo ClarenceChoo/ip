@@ -28,9 +28,10 @@ public class ChooSaveFailureTest {
         Path blockingFile = Files.createTempFile("choo-blocked-parent-", ".tmp");
         Storage storage = new Storage(blockingFile.resolve("choo.txt"));
         String actualOutput = runChoo(storage, "todo should not remain\nlist\nbye\n");
+        String lineSeparator = System.lineSeparator();
 
         assertTrue(actualOutput.contains("OOPS!!! I couldn't save the task data file."));
-        assertTrue(actualOutput.contains("Here are the tasks in your list:\n"
+        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
                 + "____________________________________________________________"));
         assertFalse(actualOutput.contains("1.[T][ ] should not remain"));
     }
