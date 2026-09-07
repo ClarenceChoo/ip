@@ -67,10 +67,9 @@ public class Storage {
      * @throws ChooException if the data file cannot be written.
      */
     public void save(List<Task> tasks) throws ChooException {
-        List<String> taskLines = new ArrayList<>();
-        for (Task task : tasks) {
-            taskLines.add(formatTask(task));
-        }
+        List<String> taskLines = tasks.stream()
+                .map(Storage::formatTask)
+                .toList();
 
         Path temporaryFile = null;
         try {
