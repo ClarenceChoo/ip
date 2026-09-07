@@ -15,6 +15,20 @@ import choo.exception.ChooException;
  */
 public class TaskListTest {
     @Test
+    void constructor_nullTask_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new TaskList(
+                new Todo("valid"), null));
+    }
+
+    @Test
+    void add_nullTask_throwsAssertionError() {
+        TaskList tasks = new TaskList();
+
+        assertThrows(AssertionError.class, () -> tasks.add((Task) null));
+        assertThrows(AssertionError.class, () -> tasks.add(1, null));
+    }
+
+    @Test
     void varargsConstructor_multipleTasks_preservesOrder() throws ChooException {
         TaskList tasks = new TaskList(
                 new Todo("first"), new Todo("second"), new Todo("third"));
