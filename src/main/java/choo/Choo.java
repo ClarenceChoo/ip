@@ -112,6 +112,9 @@ public class Choo {
      * @throws ChooException If the command cannot be completed.
      */
     private CommandResult executeCommand(ParsedCommand parsedCommand) throws ChooException {
+        assert parsedCommand != null : "Parsed command must exist before execution";
+        assert this.tasks != null : "Task list must be loaded before command execution";
+
         switch (parsedCommand.getType()) {
             case BYE:
                 return new CommandResult(this.ui.formatBye(), true);
