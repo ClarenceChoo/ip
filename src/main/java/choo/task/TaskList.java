@@ -34,7 +34,9 @@ public class TaskList {
      * @param tasks initial tasks.
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Source task list must not be null";
         this.tasks = new ArrayList<>(tasks);
+        assert !this.tasks.contains(null) : "Task list must not contain null tasks";
     }
 
     /**
@@ -43,6 +45,7 @@ public class TaskList {
      * @param task task to add.
      */
     public void add(Task task) {
+        assert task != null : "Task to add must not be null";
         this.tasks.add(task);
     }
 
@@ -54,6 +57,7 @@ public class TaskList {
      * @throws ChooException if the insertion position is outside the list.
      */
     public void add(int taskNumber, Task task) throws ChooException {
+        assert task != null : "Task to insert must not be null";
         if (taskNumber < 1 || taskNumber > this.tasks.size() + 1) {
             throw invalidPosition(taskNumber);
         }
