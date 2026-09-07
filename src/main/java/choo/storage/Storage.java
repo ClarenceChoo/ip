@@ -105,15 +105,13 @@ public class Storage {
     private static String formatTask(Task task) {
         String completionFlag = task.isDone() ? "1" : "0";
         String description = escape(task.getDescription());
-        if (task instanceof Deadline) {
-            Deadline deadline = (Deadline) task;
+        if (task instanceof Deadline deadline) {
             DateTimeFormatter deadlineStorageFormat = deadline.hasExplicitTime()
                     ? STORED_DEADLINE_DATE_TIME_FORMAT : STORED_DEADLINE_DATE_FORMAT;
             return "D | " + completionFlag + " | " + description
                     + " | " + deadline.getDueDateTime().format(deadlineStorageFormat);
         }
-        if (task instanceof Event) {
-            Event event = (Event) task;
+        if (task instanceof Event event) {
             return "E | " + completionFlag + " | " + description
                     + " | " + escape(event.getStartText())
                     + " | " + escape(event.getEndText());
@@ -131,35 +129,58 @@ public class Storage {
      */
     private static Task parseTask(String line, int lineNumber) throws ChooException {
         List<String> fields = splitEscapedFields(line, lineNumber);
+        validateFields(fields, lineNumber);
+
+        Task task = createTask(fields, lineNumber);
+        if (fields.get(1).equals("1")) {
+            task.markAsDone();
+        }
+        return task;
+    }
+
+    /**
+     * Validates the common fields shared by every stored task type.
+     *
+     * @param fields Decoded storage fields.
+     * @param lineNumber One-based line number used in error messages.
+     * @throws ChooException If a required field is missing or invalid.
+     */
+    private static void validateFields(List<String> fields, int lineNumber) throws ChooException {
         if (fields.size() < 2 || !(fields.get(1).equals("0") || fields.get(1).equals("1"))) {
             throw corruptedData(lineNumber);
         }
 
-        Task task;
-        String taskTypeCode = fields.get(0);
-        if (taskTypeCode.equals("T") && fields.size() == 3) {
-            task = new Todo(fields.get(2));
-        } else if (taskTypeCode.equals("D") && fields.size() == 4) {
-            try {
-                task = new Deadline(fields.get(2), fields.get(3));
-            } catch (DateTimeParseException exception) {
-                throw unsupportedDeadlineData(lineNumber);
-            }
-        } else if (taskTypeCode.equals("E") && fields.size() == 5) {
-            task = new Event(fields.get(2), fields.get(3), fields.get(4));
-        } else {
-            throw corruptedData(lineNumber);
-        }
         for (int i = 2; i < fields.size(); i++) {
             if (fields.get(i).isEmpty()) {
                 throw corruptedData(lineNumber);
             }
         }
+    }
 
-        if (fields.get(1).equals("1")) {
-            task.markAsDone();
+    /**
+     * Creates the task subtype encoded by validated storage fields.
+     *
+     * @param fields Decoded storage fields.
+     * @param lineNumber One-based line number used in error messages.
+     * @return Restored task without its completion status applied.
+     * @throws ChooException If the fields do not match a task type.
+     */
+    private static Task createTask(List<String> fields, int lineNumber) throws ChooException {
+        String taskTypeCode = fields.get(0);
+        if (taskTypeCode.equals("T") && fields.size() == 3) {
+            return new Todo(fields.get(2));
         }
-        return task;
+        if (taskTypeCode.equals("D") && fields.size() == 4) {
+            try {
+                return new Deadline(fields.get(2), fields.get(3));
+            } catch (DateTimeParseException exception) {
+                throw unsupportedDeadlineData(lineNumber);
+            }
+        }
+        if (taskTypeCode.equals("E") && fields.size() == 5) {
+            return new Event(fields.get(2), fields.get(3), fields.get(4));
+        }
+        throw corruptedData(lineNumber);
     }
 
     /**
