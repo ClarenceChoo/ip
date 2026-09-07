@@ -63,14 +63,15 @@ public class ChooTest {
         }
 
         String actualOutput = output.toString(StandardCharsets.UTF_8);
+        String lineSeparator = System.lineSeparator();
         assertTrue(actualOutput.contains("OOPS!!! A todo needs a description."));
         assertTrue(actualOutput.contains("OOPS!!! I don't recognize that command."));
         assertTrue(actualOutput.contains("Noted. I've removed this task:"));
         assertTrue(actualOutput.contains("[D][ ] remove this (by: Dec 6 2019)"));
         assertTrue(actualOutput.contains("Now you have 2 tasks in the list."));
-        assertTrue(actualOutput.contains("Here are the tasks in your list:\n"
-                + "1.[T][ ] keep this\n"
-                + "2.[E][ ] keep event (from: Monday to: Tuesday)\n"
+        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
+                + "1.[T][ ] keep this" + lineSeparator
+                + "2.[E][ ] keep event (from: Monday to: Tuesday)" + lineSeparator
                 + "____________________________________________________________"));
         assertFalse(actualOutput.contains("[T][ ] mystery command"));
         assertTrue(actualOutput.contains("Bye. Hope to see you again soon!"));

@@ -13,11 +13,12 @@ import choo.task.Task;
 public class Ui {
     private static final String SEPARATOR =
             "____________________________________________________________";
-    private static final String BANNER = "##### #   # ##### #####\n"
-            + "#     #   # #   # #   #\n"
-            + "#     ##### #   # #   #\n"
-            + "#     #   # #   # #   #\n"
-            + "##### #   # ##### #####\n";
+    private static final String BANNER = String.join(System.lineSeparator(),
+            "##### #   # ##### #####",
+            "#     #   # #   # #   #",
+            "#     ##### #   # #   #",
+            "#     #   # #   # #   #",
+            "##### #   # ##### #####") + System.lineSeparator();
 
     private final Scanner scanner;
     private final PrintStream output;

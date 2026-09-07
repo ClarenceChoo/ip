@@ -33,25 +33,26 @@ public class UiTest {
         ui.showError("bad command");
         ui.showBye();
 
-        String separator = "____________________________________________________________\n";
+        String lineSeparator = System.lineSeparator();
+        String separator = "____________________________________________________________" + lineSeparator;
         String expected = separator
-                + "##### #   # ##### #####\n"
-                + "#     #   # #   # #   #\n"
-                + "#     ##### #   # #   #\n"
-                + "#     #   # #   # #   #\n"
-                + "##### #   # ##### #####\n"
-                + "Hello! I'm CHOO.\n"
-                + "What can I do for you?\n"
+                + "##### #   # ##### #####" + lineSeparator
+                + "#     #   # #   # #   #" + lineSeparator
+                + "#     ##### #   # #   #" + lineSeparator
+                + "#     #   # #   # #   #" + lineSeparator
+                + "##### #   # ##### #####" + lineSeparator
+                + "Hello! I'm CHOO." + lineSeparator
+                + "What can I do for you?" + lineSeparator
                 + separator
-                + "Here are the tasks in your list:\n"
-                + "1.[T][ ] read book\n"
+                + "Here are the tasks in your list:" + lineSeparator
+                + "1.[T][ ] read book" + lineSeparator
                 + separator
-                + "Here are the matching tasks in your list:\n"
-                + "1.[T][ ] return book\n"
+                + "Here are the matching tasks in your list:" + lineSeparator
+                + "1.[T][ ] return book" + lineSeparator
                 + separator
-                + "OOPS!!! bad command\n"
+                + "OOPS!!! bad command" + lineSeparator
                 + separator
-                + "Bye. Hope to see you again soon!\n"
+                + "Bye. Hope to see you again soon!" + lineSeparator
                 + separator;
         assertEquals(expected, output.toString(StandardCharsets.UTF_8));
     }
