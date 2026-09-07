@@ -1,7 +1,9 @@
 package choo.task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import choo.exception.ChooException;
@@ -116,6 +118,26 @@ public class TaskList {
         return this.tasks.stream()
                 .filter(task -> task.getDescription().contains(keyword))
                 .toList();
+    }
+
+    /**
+     * Returns a new task list with deadlines ordered chronologically first.
+     *
+     * <p>Tasks without a deadline retain their relative order after all deadlines.
+     * Deadlines with the same due date and time also retain their relative order.</p>
+     *
+     * @return New task list sorted by deadline.
+     */
+    public TaskList sortedByDeadline() {
+        List<Task> sortedTasks = this.tasks.stream()
+                .sorted(Comparator.comparing(TaskList::getDeadlineSortKey))
+                .toList();
+        return new TaskList(sortedTasks);
+    }
+
+    private static LocalDateTime getDeadlineSortKey(Task task) {
+        return task instanceof Deadline deadline
+                ? deadline.getDueDateTime() : LocalDateTime.MAX;
     }
 
     /**

@@ -8,6 +8,8 @@ public enum CommandType {
     BYE,
     /** Displays every task. */
     LIST,
+    /** Sorts deadlines chronologically. */
+    SORT,
     /** Marks a task as completed. */
     MARK,
     /** Marks a task as incomplete. */

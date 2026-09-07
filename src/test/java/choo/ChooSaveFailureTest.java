@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import choo.exception.ChooException;
 import choo.storage.Storage;
+import choo.task.Deadline;
 import choo.task.Task;
 import choo.task.Todo;
 
@@ -47,6 +48,20 @@ public class ChooSaveFailureTest {
 
         assertTrue(actualOutput.contains("1.[T][ ] incomplete"));
         assertTrue(actualOutput.contains("2.[T][X] completed"));
+    }
+
+    @Test
+    void run_sortCannotBeSaved_keepsOriginalOrder() throws Exception {
+        Storage storage = new AlwaysFailingStorage(List.of(
+                new Deadline("later", "2026-12-31"),
+                new Deadline("earlier", "2026-01-15")));
+        String actualOutput = runChoo(storage, "sort\nlist\nbye\n");
+        String lineSeparator = System.lineSeparator();
+
+        assertTrue(actualOutput.contains("OOPS!!! I couldn't save the task data file."));
+        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
+                + "1.[D][ ] later (by: Dec 31 2026)" + lineSeparator
+                + "2.[D][ ] earlier (by: Jan 15 2026)"));
     }
 
     private static String runChoo(Storage storage, String input) throws Exception {

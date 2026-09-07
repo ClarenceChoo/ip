@@ -107,6 +107,25 @@ public class TaskListTest {
         assertEquals(List.of(), tasks.find("2019"));
     }
 
+    @Test
+    void sortedByDeadline_mixedTasks_ordersDeadlinesAndPreservesOtherOrder() throws ChooException {
+        TaskList tasks = new TaskList(List.of(
+                new Todo("first undated"),
+                new Deadline("later", "2026-12-31"),
+                new Event("second undated", "Monday", "Tuesday"),
+                new Deadline("earlier first", "2026-01-15"),
+                new Deadline("earlier second", "2026-01-15")));
+
+        TaskList sortedTasks = tasks.sortedByDeadline();
+
+        assertEquals("first undated", tasks.get(1).getDescription());
+        assertEquals("earlier first", sortedTasks.get(1).getDescription());
+        assertEquals("earlier second", sortedTasks.get(2).getDescription());
+        assertEquals("later", sortedTasks.get(3).getDescription());
+        assertEquals("first undated", sortedTasks.get(4).getDescription());
+        assertEquals("second undated", sortedTasks.get(5).getDescription());
+    }
+
     private static void assertInvalidPosition(TaskList tasks, int taskNumber) {
         ChooException exception = assertThrows(ChooException.class, () -> tasks.get(taskNumber));
         assertEquals("Task number " + taskNumber + " is outside the list.",

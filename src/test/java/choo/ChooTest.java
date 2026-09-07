@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,28 @@ public class ChooTest {
                 + "1.[T][X] read book", choo.getResponse("list"));
         assertEquals("OOPS!!! Task number 2 is outside the list.", choo.getResponse("delete 2"));
         assertEquals("Bye. Hope to see you again soon!", choo.getResponse("bye"));
+    }
+
+    @Test
+    void getResponse_sortCommand_reordersAndSavesTasks() throws Exception {
+        Path dataFile = Files.createTempDirectory("choo-sort-test-")
+                .resolve("data").resolve("choo.txt");
+        Choo choo = new Choo(new Storage(dataFile), new Ui());
+        String lineSeparator = System.lineSeparator();
+        choo.getResponse("todo undated");
+        choo.getResponse("deadline later /by 2026-12-31");
+        choo.getResponse("deadline earlier /by 2026-01-15");
+
+        String response = choo.getResponse("sort");
+
+        assertEquals("I've sorted your tasks by deadline:" + lineSeparator
+                + "1.[D][ ] earlier (by: Jan 15 2026)" + lineSeparator
+                + "2.[D][ ] later (by: Dec 31 2026)" + lineSeparator
+                + "3.[T][ ] undated", response);
+        assertEquals(List.of(
+                "D | 0 | earlier | 2026-01-15",
+                "D | 0 | later | 2026-12-31",
+                "T | 0 | undated"), Files.readAllLines(dataFile));
     }
 
     @Test

@@ -120,6 +120,8 @@ public class Choo {
                 return new CommandResult(this.ui.formatBye(), true);
             case LIST:
                 return new CommandResult(this.ui.formatTaskList(this.tasks.asList()), false);
+            case SORT:
+                return new CommandResult(sortTasksByDeadline(), false);
             case MARK:
                 return new CommandResult(updateTaskStatus(parsedCommand.getTaskNumber(), true), false);
             case UNMARK:
@@ -199,6 +201,19 @@ public class Choo {
             throw exception;
         }
         return this.ui.formatAddedTask(task, this.tasks.size());
+    }
+
+    /**
+     * Sorts deadlines chronologically and saves the reordered task list.
+     *
+     * @return Confirmation followed by the sorted task list.
+     * @throws ChooException If the reordered task list cannot be saved.
+     */
+    private String sortTasksByDeadline() throws ChooException {
+        TaskList sortedTasks = this.tasks.sortedByDeadline();
+        this.storage.save(sortedTasks.asList());
+        this.tasks = sortedTasks;
+        return this.ui.formatSortedTasks(this.tasks.asList());
     }
 
     /**

@@ -29,6 +29,9 @@ public class Parser {
         if (trimmedCommand.equals("list")) {
             return ParsedCommand.withoutDetails(CommandType.LIST);
         }
+        if (trimmedCommand.equals("sort")) {
+            return ParsedCommand.withoutDetails(CommandType.SORT);
+        }
         if (isCommand(trimmedCommand, "mark")) {
             return parseTaskNumber(trimmedCommand, "mark", CommandType.MARK);
         }
