@@ -104,6 +104,17 @@ Here are the matching tasks in your list:
 2.[D][X] return book (by: Dec 2 2019)
 ```
 
+## Sorting tasks by deadline
+
+Use `sort` to place deadlines first, ordered from earliest to latest. Todos
+and events are placed after the deadlines while retaining their existing
+relative order. Deadlines with the same date and time also retain their
+relative order.
+
+The sorted order is saved automatically and is used for future task numbers.
+
+Example: `sort`
+
 ## Handling invalid commands
 
 CHOO explains invalid commands and missing task details without changing your

@@ -173,6 +173,16 @@ public class Ui {
     }
 
     /**
+     * Formats the task list after its deadlines have been sorted chronologically.
+     *
+     * @param tasks Sorted tasks to format.
+     * @return Complete sorting confirmation and task list.
+     */
+    public String formatSortedTasks(List<Task> tasks) {
+        return formatTaskCollection("I've sorted your tasks by deadline:", tasks);
+    }
+
+    /**
      * Formats confirmation that a task was added.
      *
      * @param task Added task.

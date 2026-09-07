@@ -74,6 +74,64 @@ E | 0 | loaded event | Monday | Tuesday
 T | 0 | new \| task
 ```
 
+## Test case: Sort deadlines chronologically
+
+Aim: Verify sorting orders deadlines, preserves undated task order, and saves the reordered list.
+
+Initial data:
+```text
+T | 0 | first undated
+D | 0 | later deadline | 2026-12-31
+E | 0 | second undated | Monday | Tuesday
+D | 0 | morning deadline | 2026-01-15 0900
+D | 0 | date-only deadline | 2026-01-15
+```
+
+Input:
+```text
+sort
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+Hello! I'm CHOO.
+What can I do for you?
+____________________________________________________________
+I've sorted your tasks by deadline:
+1.[D][ ] date-only deadline (by: Jan 15 2026)
+2.[D][ ] morning deadline (by: Jan 15 2026, 9:00AM)
+3.[D][ ] later deadline (by: Dec 31 2026)
+4.[T][ ] first undated
+5.[E][ ] second undated (from: Monday to: Tuesday)
+____________________________________________________________
+Here are the tasks in your list:
+1.[D][ ] date-only deadline (by: Jan 15 2026)
+2.[D][ ] morning deadline (by: Jan 15 2026, 9:00AM)
+3.[D][ ] later deadline (by: Dec 31 2026)
+4.[T][ ] first undated
+5.[E][ ] second undated (from: Monday to: Tuesday)
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Expected data:
+```text
+D | 0 | date-only deadline | 2026-01-15
+D | 0 | morning deadline | 2026-01-15 0900
+D | 0 | later deadline | 2026-12-31
+T | 0 | first undated
+E | 0 | second undated | Monday | Tuesday
+```
+
 ## Test case: Level 4 task types
 
 Aim: Verify task parsing, formatted deadline dates and times, task counts, marking, listing, and exit.

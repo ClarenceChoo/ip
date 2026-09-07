@@ -15,6 +15,7 @@ public class ParserTest {
     void parse_simpleCommands_returnsMatchingTypes() throws ChooException {
         assertEquals(CommandType.BYE, Parser.parse("  bye  ").getType());
         assertEquals(CommandType.LIST, Parser.parse("list").getType());
+        assertEquals(CommandType.SORT, Parser.parse(" sort ").getType());
     }
 
     @Test
