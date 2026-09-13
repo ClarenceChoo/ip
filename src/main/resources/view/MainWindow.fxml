@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="600.0" minWidth="400.0"
+<AnchorPane minHeight="480.0" minWidth="360.0"
             prefHeight="640.0" prefWidth="440.0"
             stylesheets="@../css/main.css"
             xmlns="http://javafx.com/javafx/17"
