@@ -40,7 +40,7 @@
                         <VBox alignment="CENTER_LEFT" spacing="0.0">
                             <children>
                                 <Label styleClass="brand-name" text="CHOO" />
-                                <Label styleClass="brand-tagline" text="TASK ASSISTANT" />
+                                <Label styleClass="brand-tagline" text="TASK CONDUCTOR" />
                             </children>
                         </VBox>
                     </children>

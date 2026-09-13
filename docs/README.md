@@ -1,6 +1,8 @@
 # CHOO User Guide
 
-CHOO is a desktop chatbot that keeps track of your tasks.
+CHOO is a calm task conductor that keeps your work on track. Its railway
+stationmaster personality uses short, clear phrases while helping you manage
+tasks.
 
 Enter one command at a time in the text field, then press Enter or click
 **Send**. Enter `bye` or close the window when you want to exit.
@@ -99,7 +101,7 @@ Example: `find book`
 Example output:
 
 ```text
-Here are the matching tasks in your list:
+Here are the matching stops:
 1.[T][ ] read book
 2.[D][X] return book (by: Dec 2 2019)
 ```

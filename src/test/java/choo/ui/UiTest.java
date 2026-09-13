@@ -41,18 +41,18 @@ public class UiTest {
                 + "#     ##### #   # #   #" + lineSeparator
                 + "#     #   # #   # #   #" + lineSeparator
                 + "##### #   # ##### #####" + lineSeparator
-                + "Hello! I'm CHOO." + lineSeparator
-                + "What can I do for you?" + lineSeparator
+                + "All aboard! I'm CHOO, your task conductor." + lineSeparator
+                + "Tell me what needs to stay on track." + lineSeparator
                 + separator
-                + "Here are the tasks in your list:" + lineSeparator
+                + "Here is your task itinerary:" + lineSeparator
                 + "1.[T][ ] read book" + lineSeparator
                 + separator
-                + "Here are the matching tasks in your list:" + lineSeparator
+                + "Here are the matching stops:" + lineSeparator
                 + "1.[T][ ] return book" + lineSeparator
                 + separator
-                + "OOPS!!! bad command" + lineSeparator
+                + "OOPS!!! Signal problem: bad command" + lineSeparator
                 + separator
-                + "Bye. Hope to see you again soon!" + lineSeparator
+                + "End of the line for now. Safe travels!" + lineSeparator
                 + separator;
         assertEquals(expected, output.toString(StandardCharsets.UTF_8));
     }
