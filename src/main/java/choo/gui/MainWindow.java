@@ -57,9 +57,12 @@ public class MainWindow extends AnchorPane {
         }
 
         String response = this.choo.getResponse(input);
+        DialogBox responseDialog = response.startsWith("OOPS!!!")
+                ? DialogBox.getErrorDialog(response, CHOO_IMAGE)
+                : DialogBox.getChooDialog(response, CHOO_IMAGE);
         this.dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, USER_IMAGE),
-                DialogBox.getChooDialog(response, CHOO_IMAGE));
+                responseDialog);
         this.userInput.clear();
         if (input.equals("bye")) {
             Platform.exit();

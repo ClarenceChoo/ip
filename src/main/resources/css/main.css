@@ -7,6 +7,8 @@
     -choo-muted: #8b98a8;
     -choo-teal: #20b8ae;
     -choo-teal-dark: #178f89;
+    -choo-error: #ff6b7a;
+    -choo-error-surface: #351d26;
     -fx-font-family: "System";
     -fx-font-size: 13px;
 }
@@ -84,6 +86,17 @@
 .user-dialog .dialog-bubble {
     -fx-background-color: -choo-teal-dark;
     -fx-text-fill: white;
+}
+
+.error-dialog .dialog-bubble {
+    -fx-background-color: -choo-error-surface;
+    -fx-border-color: -choo-error;
+    -fx-border-width: 1px;
+    -fx-text-fill: #ffd9de;
+}
+
+.error-dialog .avatar-frame {
+    -fx-border-color: -choo-error;
 }
 
 .choo-dialog .avatar-frame {

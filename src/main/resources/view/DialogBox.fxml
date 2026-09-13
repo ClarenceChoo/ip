@@ -16,7 +16,6 @@
          xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label fx:id="dialog"
-               maxWidth="290.0"
                minHeight="-Infinity"
                styleClass="dialog-bubble"
                text="Message"
@@ -24,8 +23,8 @@
         <StackPane styleClass="avatar-frame">
             <children>
                 <ImageView fx:id="displayPicture"
-                           fitHeight="50.0"
-                           fitWidth="50.0"
+                           fitHeight="38.0"
+                           fitWidth="38.0"
                            pickOnBounds="true"
                            preserveRatio="true" />
             </children>

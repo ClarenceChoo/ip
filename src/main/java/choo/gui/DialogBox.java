@@ -3,6 +3,7 @@ package choo.gui;
 import java.io.IOException;
 import java.util.Collections;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +36,8 @@ public class DialogBox extends HBox {
 
         this.dialog.setText(text);
         this.displayPicture.setImage(image);
+        this.dialog.maxWidthProperty().bind(Bindings.max(
+                180.0, widthProperty().multiply(0.78).subtract(52.0)));
     }
 
     /**
@@ -61,6 +64,19 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.getStyleClass().add("choo-dialog");
         dialogBox.flip();
+        return dialogBox;
+    }
+
+    /**
+     * Creates a visually prominent error response from CHOO.
+     *
+     * @param text Error response text.
+     * @param image CHOO avatar.
+     * @return Error dialog box.
+     */
+    public static DialogBox getErrorDialog(String text, Image image) {
+        DialogBox dialogBox = getChooDialog(text, image);
+        dialogBox.getStyleClass().add("error-dialog");
         return dialogBox;
     }
 

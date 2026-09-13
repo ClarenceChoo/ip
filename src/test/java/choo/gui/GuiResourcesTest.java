@@ -1,5 +1,6 @@
 package choo.gui;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -7,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,27 @@ class GuiResourcesTest {
         }
         assertValidAvatar("/images/ChooAvatar.png");
         assertValidAvatar("/images/UserAvatar.png");
+    }
+
+    @Test
+    void guiResources_polishedConversation_defineResponsiveErrorStyling() throws IOException {
+        String stylesheet = readResource("/css/main.css");
+        String dialogFxml = readResource("/view/DialogBox.fxml");
+
+        assertTrue(stylesheet.contains(".error-dialog .dialog-bubble"),
+                "Error responses need a distinct visual style.");
+        assertTrue(stylesheet.contains("-choo-error"),
+                "The theme should define a reusable error color.");
+        assertFalse(dialogFxml.contains("maxWidth=\"290.0\""),
+                "Dialog bubbles should adapt to a resized window.");
+    }
+
+    private static String readResource(String resourcePath) throws IOException {
+        URL resource = Main.class.getResource(resourcePath);
+        assertNotNull(resource, "The resource must be packaged at " + resourcePath);
+        try (InputStream input = resource.openStream()) {
+            return new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 
     private static void assertValidAvatar(String resourcePath) throws IOException {
