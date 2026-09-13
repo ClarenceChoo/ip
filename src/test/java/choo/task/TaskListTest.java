@@ -16,8 +16,13 @@ import choo.exception.ChooException;
 public class TaskListTest {
     @Test
     void constructor_nullTask_throwsAssertionError() {
+        List<Task> tasksWithNull = new ArrayList<>();
+        tasksWithNull.add(new Todo("valid"));
+        tasksWithNull.add(null);
+
         assertThrows(AssertionError.class, () -> new TaskList(
                 new Todo("valid"), null));
+        assertThrows(AssertionError.class, () -> new TaskList(tasksWithNull));
     }
 
     @Test

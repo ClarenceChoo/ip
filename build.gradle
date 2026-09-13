@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'checkstyle'
+    id 'jacoco'
     id 'application'
     id 'com.gradleup.shadow' version '9.5.1'
 }
@@ -8,6 +9,15 @@ plugins {
 checkstyle {
     toolVersion = '11.0.0'
 }
+
+jacoco {
+    toolVersion = '0.8.14'
+}
+
+// JavaFX rendering is smoke-tested manually; enforce coverage on testable core logic.
+def testableClasses = files(sourceSets.main.output.classesDirs.collect {
+    fileTree(dir: it, exclude: ['choo/gui/**'])
+})
 
 java {
     sourceCompatibility = JavaVersion.VERSION_25
@@ -54,6 +64,38 @@ test {
         showStandardStreams = false
     }
 }
+
+jacocoTestReport {
+    dependsOn test
+    classDirectories.setFrom(testableClasses)
+
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    classDirectories.setFrom(testableClasses)
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.95
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
 
 application {
     mainClass = 'choo.gui.Launcher'

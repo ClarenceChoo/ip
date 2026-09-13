@@ -14,7 +14,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import choo.exception.ChooException;
 import choo.storage.Storage;
+import choo.task.Task;
 import choo.ui.Ui;
 
 /**
@@ -60,6 +62,47 @@ public class ChooTest {
                 "D | 0 | earlier | 2026-01-15",
                 "D | 0 | later | 2026-12-31",
                 "T | 0 | undated"), Files.readAllLines(dataFile));
+    }
+
+    @Test
+    void getResponse_findUnmarkAndDeleteCommands_updateExpectedState() throws Exception {
+        Path dataFile = Files.createTempDirectory("choo-command-coverage-test-")
+                .resolve("data").resolve("choo.txt");
+        Choo choo = new Choo(new Storage(dataFile), new Ui());
+        String lineSeparator = System.lineSeparator();
+        choo.getResponse("todo read book");
+        choo.getResponse("todo write notes");
+        choo.getResponse("mark 1");
+
+        assertEquals("Back on the route. I've marked this task as not done:"
+                + lineSeparator + "  [T][ ] read book", choo.getResponse("unmark 1"));
+        assertEquals("Here are the matching stops:" + lineSeparator
+                + "1.[T][ ] read book", choo.getResponse("find book"));
+        assertEquals("Route updated. I've removed this task:" + lineSeparator
+                + "  [T][ ] write notes" + lineSeparator
+                + "Your itinerary now has 1 task.", choo.getResponse("delete 2"));
+        assertEquals(List.of("T | 0 | read book"), Files.readAllLines(dataFile));
+    }
+
+    @Test
+    void run_loadFails_showsErrorAndStops() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Ui ui = new Ui(
+                new ByteArrayInputStream("todo ignored\n".getBytes(StandardCharsets.UTF_8)),
+                new PrintStream(output, true, StandardCharsets.UTF_8));
+        Storage failingStorage = new Storage(Path.of("unused-test-data.txt")) {
+            @Override
+            public List<Task> load() throws ChooException {
+                throw new ChooException("I couldn't read the task data file.");
+            }
+        };
+
+        new Choo(failingStorage, ui).run();
+
+        String actualOutput = output.toString(StandardCharsets.UTF_8);
+        assertTrue(actualOutput.contains(
+                "OOPS!!! Signal problem: I couldn't read the task data file."));
+        assertFalse(actualOutput.contains("Ticket issued"));
     }
 
     @Test
