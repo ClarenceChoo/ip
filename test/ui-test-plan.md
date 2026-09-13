@@ -36,34 +36,34 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][X] loaded todo
 2.[D][ ] loaded deadline (by: Dec 6 2019, 12:00AM)
 3.[E][ ] loaded event (from: Monday to: Tuesday)
 ____________________________________________________________
-Nice! I've marked this task as done:
+On track! I've marked this task as done:
   [D][X] loaded deadline (by: Dec 6 2019, 12:00AM)
 ____________________________________________________________
-OK, I've marked this task as not done yet:
+Back on the route. I've marked this task as not done:
   [T][ ] loaded todo
 ____________________________________________________________
-Noted. I've removed this task:
+Route updated. I've removed this task:
   [D][X] loaded deadline (by: Dec 6 2019, 12:00AM)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] new | task
-Now you have 3 tasks in the list.
+Your itinerary now has 3 tasks.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] loaded todo
 2.[E][ ] loaded event (from: Monday to: Tuesday)
 3.[T][ ] new | task
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -102,24 +102,24 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-I've sorted your tasks by deadline:
+Timetable sorted by deadline:
 1.[D][ ] date-only deadline (by: Jan 15 2026)
 2.[D][ ] morning deadline (by: Jan 15 2026, 9:00AM)
 3.[D][ ] later deadline (by: Dec 31 2026)
 4.[T][ ] first undated
 5.[E][ ] second undated (from: Monday to: Tuesday)
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[D][ ] date-only deadline (by: Jan 15 2026)
 2.[D][ ] morning deadline (by: Jan 15 2026, 9:00AM)
 3.[D][ ] later deadline (by: Dec 31 2026)
 4.[T][ ] first undated
 5.[E][ ] second undated (from: Monday to: Tuesday)
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -155,35 +155,35 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] borrow book
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [D][ ] return book (by: Dec 6 2019)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [D][ ] do homework (by: Dec 7 2019, 6:00PM)
-Now you have 3 tasks in the list.
+Your itinerary now has 3 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now you have 4 tasks in the list.
+Your itinerary now has 4 tasks.
 ____________________________________________________________
-Nice! I've marked this task as done:
+On track! I've marked this task as done:
   [D][X] return book (by: Dec 6 2019)
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] borrow book
 2.[D][X] return book (by: Dec 6 2019)
 3.[D][ ] do homework (by: Dec 7 2019, 6:00PM)
 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -216,47 +216,47 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] first
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [D][ ] second (by: Dec 6 2019)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [E][ ] third (from: Monday to: Tuesday)
-Now you have 3 tasks in the list.
+Your itinerary now has 3 tasks.
 ____________________________________________________________
-OOPS!!! Enter a whole-number task position after delete.
+OOPS!!! Signal problem: Enter a whole-number task position after delete.
 ____________________________________________________________
-OOPS!!! Enter a whole-number task position after delete.
+OOPS!!! Signal problem: Enter a whole-number task position after delete.
 ____________________________________________________________
-OOPS!!! Task number 0 is outside the list.
+OOPS!!! Signal problem: Task number 0 is outside the list.
 ____________________________________________________________
-OOPS!!! Task number -1 is outside the list.
+OOPS!!! Signal problem: Task number -1 is outside the list.
 ____________________________________________________________
-OOPS!!! Task number 4 is outside the list.
+OOPS!!! Signal problem: Task number 4 is outside the list.
 ____________________________________________________________
-Noted. I've removed this task:
+Route updated. I've removed this task:
   [D][ ] second (by: Dec 6 2019)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] first
 2.[E][ ] third (from: Monday to: Tuesday)
 ____________________________________________________________
-Noted. I've removed this task:
+Route updated. I've removed this task:
   [T][ ] first
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[E][ ] third (from: Monday to: Tuesday)
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -292,49 +292,49 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-OOPS!!! A todo needs a description.
+OOPS!!! Signal problem: A todo needs a description.
 ____________________________________________________________
-OOPS!!! I don't recognize that command.
+OOPS!!! Signal problem: I don't recognize that command.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] keep this
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-OOPS!!! A deadline needs a /by date or time.
+OOPS!!! Signal problem: A deadline needs a /by date or time.
 ____________________________________________________________
-OOPS!!! A deadline needs a description.
+OOPS!!! Signal problem: A deadline needs a description.
 ____________________________________________________________
-OOPS!!! A deadline needs a /by date or time.
+OOPS!!! Signal problem: A deadline needs a /by date or time.
 ____________________________________________________________
-OOPS!!! Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
+OOPS!!! Signal problem: Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
 ____________________________________________________________
-OOPS!!! Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
+OOPS!!! Signal problem: Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [D][ ] report (by: Dec 6 2019)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-OOPS!!! An event needs a description.
+OOPS!!! Signal problem: An event needs a description.
 ____________________________________________________________
-OOPS!!! An event needs both /from and /to values.
+OOPS!!! Signal problem: An event needs both /from and /to values.
 ____________________________________________________________
-OOPS!!! An event needs both /from and /to values.
+OOPS!!! Signal problem: An event needs both /from and /to values.
 ____________________________________________________________
-OOPS!!! An event needs both /from and /to values.
+OOPS!!! Signal problem: An event needs both /from and /to values.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [E][ ] meeting (from: Monday to: Tuesday)
-Now you have 3 tasks in the list.
+Your itinerary now has 3 tasks.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] keep this
 2.[D][ ] report (by: Dec 6 2019)
 3.[E][ ] meeting (from: Monday to: Tuesday)
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -364,33 +364,33 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] first
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-OOPS!!! Enter a whole-number task position after mark.
+OOPS!!! Signal problem: Enter a whole-number task position after mark.
 ____________________________________________________________
-OOPS!!! Enter a whole-number task position after mark.
+OOPS!!! Signal problem: Enter a whole-number task position after mark.
 ____________________________________________________________
-OOPS!!! Task number 2 is outside the list.
+OOPS!!! Signal problem: Task number 2 is outside the list.
 ____________________________________________________________
-Nice! I've marked this task as done:
+On track! I've marked this task as done:
   [T][X] first
 ____________________________________________________________
-OOPS!!! Enter a whole-number task position after unmark.
+OOPS!!! Signal problem: Enter a whole-number task position after unmark.
 ____________________________________________________________
-OOPS!!! Task number 0 is outside the list.
+OOPS!!! Signal problem: Task number 0 is outside the list.
 ____________________________________________________________
-OK, I've marked this task as not done yet:
+Back on the route. I've marked this task as not done:
   [T][ ] first
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] first
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```
 
@@ -420,43 +420,43 @@ ____________________________________________________________
 #     ##### #   # #   #
 #     #   # #   # #   #
 ##### #   # ##### #####
-Hello! I'm CHOO.
-What can I do for you?
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Your itinerary now has 1 task.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [D][ ] return book (by: Dec 6 2019)
-Now you have 2 tasks in the list.
+Your itinerary now has 2 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [E][ ] book club (from: Monday to: Tuesday)
-Now you have 3 tasks in the list.
+Your itinerary now has 3 tasks.
 ____________________________________________________________
-Got it. I've added this task:
+Ticket issued. I've added this task:
   [T][ ] BOOK notes
-Now you have 4 tasks in the list.
+Your itinerary now has 4 tasks.
 ____________________________________________________________
-Here are the matching tasks in your list:
+Here are the matching stops:
 1.[T][ ] read book
 2.[D][ ] return book (by: Dec 6 2019)
 3.[E][ ] book club (from: Monday to: Tuesday)
 ____________________________________________________________
-Here are the matching tasks in your list:
+Here are the matching stops:
 ____________________________________________________________
-Here are the matching tasks in your list:
+Here are the matching stops:
 1.[T][ ] BOOK notes
 ____________________________________________________________
-OOPS!!! A find command needs a keyword.
+OOPS!!! Signal problem: A find command needs a keyword.
 ____________________________________________________________
-Here are the tasks in your list:
+Here is your task itinerary:
 1.[T][ ] read book
 2.[D][ ] return book (by: Dec 6 2019)
 3.[E][ ] book club (from: Monday to: Tuesday)
 4.[T][ ] BOOK notes
 ____________________________________________________________
-Bye. Hope to see you again soon!
+End of the line for now. Safe travels!
 ____________________________________________________________
 ```

@@ -31,8 +31,8 @@ public class ChooSaveFailureTest {
         String actualOutput = runChoo(storage, "todo should not remain\nlist\nbye\n");
         String lineSeparator = System.lineSeparator();
 
-        assertTrue(actualOutput.contains("OOPS!!! I couldn't save the task data file."));
-        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
+        assertTrue(actualOutput.contains("OOPS!!! Signal problem: I couldn't save the task data file."));
+        assertTrue(actualOutput.contains("Here is your task itinerary:" + lineSeparator
                 + "____________________________________________________________"));
         assertFalse(actualOutput.contains("1.[T][ ] should not remain"));
     }
@@ -58,8 +58,8 @@ public class ChooSaveFailureTest {
         String actualOutput = runChoo(storage, "sort\nlist\nbye\n");
         String lineSeparator = System.lineSeparator();
 
-        assertTrue(actualOutput.contains("OOPS!!! I couldn't save the task data file."));
-        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
+        assertTrue(actualOutput.contains("OOPS!!! Signal problem: I couldn't save the task data file."));
+        assertTrue(actualOutput.contains("Here is your task itinerary:" + lineSeparator
                 + "1.[D][ ] later (by: Dec 31 2026)" + lineSeparator
                 + "2.[D][ ] earlier (by: Jan 15 2026)"));
     }

@@ -65,8 +65,8 @@ public class Ui {
     public void showWelcome() {
         showSeparator();
         this.output.print(BANNER);
-        this.output.println("Hello! I'm CHOO.");
-        this.output.println("What can I do for you?");
+        this.output.println("All aboard! I'm CHOO, your task conductor.");
+        this.output.println("Tell me what needs to stay on track.");
         showSeparator();
     }
 
@@ -159,7 +159,7 @@ public class Ui {
      * @return Complete task-list response.
      */
     public String formatTaskList(List<Task> tasks) {
-        return formatTaskCollection("Here are the tasks in your list:", tasks);
+        return formatTaskCollection("Here is your task itinerary:", tasks);
     }
 
     /**
@@ -169,7 +169,7 @@ public class Ui {
      * @return Complete search-result response.
      */
     public String formatMatchingTasks(List<Task> tasks) {
-        return formatTaskCollection("Here are the matching tasks in your list:", tasks);
+        return formatTaskCollection("Here are the matching stops:", tasks);
     }
 
     /**
@@ -179,7 +179,7 @@ public class Ui {
      * @return Complete sorting confirmation and task list.
      */
     public String formatSortedTasks(List<Task> tasks) {
-        return formatTaskCollection("I've sorted your tasks by deadline:", tasks);
+        return formatTaskCollection("Timetable sorted by deadline:", tasks);
     }
 
     /**
@@ -190,7 +190,7 @@ public class Ui {
      * @return Complete addition response.
      */
     public String formatAddedTask(Task task, int taskCount) {
-        return "Got it. I've added this task:" + System.lineSeparator()
+        return "Ticket issued. I've added this task:" + System.lineSeparator()
                 + "  " + task + System.lineSeparator()
                 + formatTaskCount(taskCount);
     }
@@ -203,7 +203,7 @@ public class Ui {
      * @return Complete deletion response.
      */
     public String formatDeletedTask(Task task, int taskCount) {
-        return "Noted. I've removed this task:" + System.lineSeparator()
+        return "Route updated. I've removed this task:" + System.lineSeparator()
                 + "  " + task + System.lineSeparator()
                 + formatTaskCount(taskCount);
     }
@@ -217,8 +217,8 @@ public class Ui {
      */
     public String formatTaskStatusChanged(Task task, boolean isMarked) {
         String summary = isMarked
-                ? "Nice! I've marked this task as done:"
-                : "OK, I've marked this task as not done yet:";
+                ? "On track! I've marked this task as done:"
+                : "Back on the route. I've marked this task as not done:";
         return summary + System.lineSeparator() + "  " + task;
     }
 
@@ -229,7 +229,7 @@ public class Ui {
      * @return Complete error response.
      */
     public String formatError(String message) {
-        return "OOPS!!! " + message;
+        return "OOPS!!! Signal problem: " + message;
     }
 
     /**
@@ -238,11 +238,12 @@ public class Ui {
      * @return Farewell response.
      */
     public String formatBye() {
-        return "Bye. Hope to see you again soon!";
+        return "End of the line for now. Safe travels!";
     }
 
     private String formatTaskCount(int taskCount) {
-        return "Now you have " + taskCount + " tasks in the list.";
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        return "Your itinerary now has " + taskCount + " " + taskLabel + ".";
     }
 
     private String formatTaskCollection(String heading, List<Task> tasks) {

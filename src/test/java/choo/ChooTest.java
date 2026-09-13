@@ -28,15 +28,16 @@ public class ChooTest {
         Choo choo = new Choo(new Storage(dataFile), new Ui());
         String lineSeparator = System.lineSeparator();
 
-        assertEquals("Got it. I've added this task:" + lineSeparator
+        assertEquals("Ticket issued. I've added this task:" + lineSeparator
                 + "  [T][ ] read book" + lineSeparator
-                + "Now you have 1 tasks in the list.", choo.getResponse("todo read book"));
-        assertEquals("Nice! I've marked this task as done:" + lineSeparator
+                + "Your itinerary now has 1 task.", choo.getResponse("todo read book"));
+        assertEquals("On track! I've marked this task as done:" + lineSeparator
                 + "  [T][X] read book", choo.getResponse("mark 1"));
-        assertEquals("Here are the tasks in your list:" + lineSeparator
+        assertEquals("Here is your task itinerary:" + lineSeparator
                 + "1.[T][X] read book", choo.getResponse("list"));
-        assertEquals("OOPS!!! Task number 2 is outside the list.", choo.getResponse("delete 2"));
-        assertEquals("Bye. Hope to see you again soon!", choo.getResponse("bye"));
+        assertEquals("OOPS!!! Signal problem: Task number 2 is outside the list.",
+                choo.getResponse("delete 2"));
+        assertEquals("End of the line for now. Safe travels!", choo.getResponse("bye"));
     }
 
     @Test
@@ -51,7 +52,7 @@ public class ChooTest {
 
         String response = choo.getResponse("sort");
 
-        assertEquals("I've sorted your tasks by deadline:" + lineSeparator
+        assertEquals("Timetable sorted by deadline:" + lineSeparator
                 + "1.[D][ ] earlier (by: Jan 15 2026)" + lineSeparator
                 + "2.[D][ ] later (by: Dec 31 2026)" + lineSeparator
                 + "3.[T][ ] undated", response);
@@ -87,16 +88,16 @@ public class ChooTest {
 
         String actualOutput = output.toString(StandardCharsets.UTF_8);
         String lineSeparator = System.lineSeparator();
-        assertTrue(actualOutput.contains("OOPS!!! A todo needs a description."));
-        assertTrue(actualOutput.contains("OOPS!!! I don't recognize that command."));
-        assertTrue(actualOutput.contains("Noted. I've removed this task:"));
+        assertTrue(actualOutput.contains("OOPS!!! Signal problem: A todo needs a description."));
+        assertTrue(actualOutput.contains("OOPS!!! Signal problem: I don't recognize that command."));
+        assertTrue(actualOutput.contains("Route updated. I've removed this task:"));
         assertTrue(actualOutput.contains("[D][ ] remove this (by: Dec 6 2019)"));
-        assertTrue(actualOutput.contains("Now you have 2 tasks in the list."));
-        assertTrue(actualOutput.contains("Here are the tasks in your list:" + lineSeparator
+        assertTrue(actualOutput.contains("Your itinerary now has 2 tasks."));
+        assertTrue(actualOutput.contains("Here is your task itinerary:" + lineSeparator
                 + "1.[T][ ] keep this" + lineSeparator
                 + "2.[E][ ] keep event (from: Monday to: Tuesday)" + lineSeparator
                 + "____________________________________________________________"));
         assertFalse(actualOutput.contains("[T][ ] mystery command"));
-        assertTrue(actualOutput.contains("Bye. Hope to see you again soon!"));
+        assertTrue(actualOutput.contains("End of the line for now. Safe travels!"));
     }
 }

@@ -43,7 +43,10 @@ public class MainWindow extends AnchorPane {
     public void setChoo(Choo choo) {
         this.choo = choo;
         this.dialogContainer.getChildren().add(
-                DialogBox.getChooDialog("Hello! I'm CHOO. What can I do for you?", CHOO_IMAGE));
+                DialogBox.getChooDialog(
+                        "All aboard! I'm CHOO, your task conductor. "
+                                + "Tell me what needs to stay on track.",
+                        CHOO_IMAGE));
     }
 
     /**
