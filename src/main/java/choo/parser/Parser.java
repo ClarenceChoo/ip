@@ -22,15 +22,18 @@ public class Parser {
      * @throws ChooException if the command or its details are invalid.
      */
     public static ParsedCommand parse(String command) throws ChooException {
-        String trimmedCommand = command.trim();
-        if (trimmedCommand.equals("bye")) {
-            return ParsedCommand.withoutDetails(CommandType.BYE);
+        String trimmedCommand = command == null ? "" : command.trim();
+        if (trimmedCommand.isEmpty()) {
+            throw new ChooException("A command cannot be empty.");
         }
-        if (trimmedCommand.equals("list")) {
-            return ParsedCommand.withoutDetails(CommandType.LIST);
+        if (isCommand(trimmedCommand, "bye")) {
+            return parseCommandWithoutDetails(trimmedCommand, "bye", CommandType.BYE);
         }
-        if (trimmedCommand.equals("sort")) {
-            return ParsedCommand.withoutDetails(CommandType.SORT);
+        if (isCommand(trimmedCommand, "list")) {
+            return parseCommandWithoutDetails(trimmedCommand, "list", CommandType.LIST);
+        }
+        if (isCommand(trimmedCommand, "sort")) {
+            return parseCommandWithoutDetails(trimmedCommand, "sort", CommandType.SORT);
         }
         if (isCommand(trimmedCommand, "mark")) {
             return parseTaskNumber(trimmedCommand, "mark", CommandType.MARK);
@@ -58,6 +61,23 @@ public class Parser {
 
     private static boolean isCommand(String command, String keyword) {
         return command.equals(keyword) || command.startsWith(keyword + " ");
+    }
+
+    /**
+     * Parses a command that does not accept any arguments.
+     *
+     * @param command Complete trimmed command.
+     * @param keyword Expected command keyword.
+     * @param type Command type to include in the result.
+     * @return Parsed command without details.
+     * @throws ChooException If the command contains extra details.
+     */
+    private static ParsedCommand parseCommandWithoutDetails(String command, String keyword,
+            CommandType type) throws ChooException {
+        if (!command.equals(keyword)) {
+            throw new ChooException("The " + keyword + " command does not accept extra details.");
+        }
+        return ParsedCommand.withoutDetails(type);
     }
 
     /**
@@ -124,9 +144,12 @@ public class Parser {
             throw new ChooException("A deadline needs a description.");
         }
 
-        int byDelimiterIndex = taskDetails.indexOf("/by");
+        int byDelimiterIndex = findDelimiter(taskDetails, "/by", 0);
         if (byDelimiterIndex < 0) {
             throw new ChooException("A deadline needs a /by date or time.");
+        }
+        if (findDelimiter(taskDetails, "/by", byDelimiterIndex + 3) >= 0) {
+            throw new ChooException("A deadline needs exactly one /by value.");
         }
 
         String description = taskDetails.substring(0, byDelimiterIndex).trim();
@@ -158,11 +181,16 @@ public class Parser {
             throw new ChooException("An event needs a description.");
         }
 
-        int fromDelimiterIndex = taskDetails.indexOf("/from");
-        int toDelimiterIndex = taskDetails.indexOf("/to");
-        if (fromDelimiterIndex < 0 || toDelimiterIndex < 0
-                || toDelimiterIndex <= fromDelimiterIndex) {
+        int fromDelimiterIndex = findDelimiter(taskDetails, "/from", 0);
+        int toDelimiterIndex = findDelimiter(taskDetails, "/to", 0);
+        if (fromDelimiterIndex < 0 || toDelimiterIndex < 0) {
             throw new ChooException("An event needs both /from and /to values.");
+        }
+        boolean hasRepeatedFrom = findDelimiter(taskDetails, "/from", fromDelimiterIndex + 5) >= 0;
+        boolean hasRepeatedTo = findDelimiter(taskDetails, "/to", toDelimiterIndex + 3) >= 0;
+        if (hasRepeatedFrom || hasRepeatedTo || toDelimiterIndex <= fromDelimiterIndex) {
+            throw new ChooException(
+                    "An event needs exactly one /from followed by exactly one /to value.");
         }
 
         String description = taskDetails.substring(0, fromDelimiterIndex).trim();
@@ -175,5 +203,29 @@ public class Parser {
             throw new ChooException("An event needs both /from and /to values.");
         }
         return ParsedCommand.forNewTask(new Event(description, startText, endText));
+    }
+
+    /**
+     * Finds a standalone delimiter at or after a given position.
+     *
+     * @param text Text to search.
+     * @param delimiter Reserved delimiter token.
+     * @param startIndex Position at which to start searching.
+     * @return Index of the delimiter, or -1 if it is absent.
+     */
+    private static int findDelimiter(String text, String delimiter, int startIndex) {
+        int candidateIndex = text.indexOf(delimiter, startIndex);
+        while (candidateIndex >= 0) {
+            int delimiterEndIndex = candidateIndex + delimiter.length();
+            boolean hasLeftBoundary = candidateIndex == 0
+                    || Character.isWhitespace(text.charAt(candidateIndex - 1));
+            boolean hasRightBoundary = delimiterEndIndex == text.length()
+                    || Character.isWhitespace(text.charAt(delimiterEndIndex));
+            if (hasLeftBoundary && hasRightBoundary) {
+                return candidateIndex;
+            }
+            candidateIndex = text.indexOf(delimiter, delimiterEndIndex);
+        }
+        return -1;
     }
 }

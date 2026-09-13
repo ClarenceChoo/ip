@@ -123,6 +123,11 @@ CHOO explains invalid commands and missing task details without changing your
 existing task list. It also reports unreadable or corrupted task data instead
 of crashing. Correct the command or data-file problem and try again.
 
+Blank commands are rejected. The `list`, `sort`, and `bye` commands do not
+accept extra details. A deadline must contain exactly one standalone `/by`
+delimiter. An event must contain exactly one standalone `/from` delimiter,
+followed by exactly one standalone `/to` delimiter.
+
 ## Exiting CHOO
 
 Use `bye` to close the window. You can also use the window's normal close
