@@ -132,6 +132,63 @@ T | 0 | first undated
 E | 0 | second undated | Monday | Tuesday
 ```
 
+## Test case: Reject malformed command structures
+
+Aim: Verify malformed command structures are rejected without changing task state.
+
+Input:
+```text
+todo keep this
+
+list now
+sort later
+bye please
+deadline report /by 2019-12-02 /by 2019-12-03
+event meeting /from Mon /from Tue /to Wed
+event meeting /from Mon /to Tue /to Wed
+event meeting /to Tue /from Mon
+list
+bye
+```
+
+Expected output:
+```text
+____________________________________________________________
+##### #   # ##### #####
+#     #   # #   # #   #
+#     ##### #   # #   #
+#     #   # #   # #   #
+##### #   # ##### #####
+All aboard! I'm CHOO, your task conductor.
+Tell me what needs to stay on track.
+____________________________________________________________
+Ticket issued. I've added this task:
+  [T][ ] keep this
+Your itinerary now has 1 task.
+____________________________________________________________
+OOPS!!! Signal problem: A command cannot be empty.
+____________________________________________________________
+OOPS!!! Signal problem: The list command does not accept extra details.
+____________________________________________________________
+OOPS!!! Signal problem: The sort command does not accept extra details.
+____________________________________________________________
+OOPS!!! Signal problem: The bye command does not accept extra details.
+____________________________________________________________
+OOPS!!! Signal problem: A deadline needs exactly one /by value.
+____________________________________________________________
+OOPS!!! Signal problem: An event needs exactly one /from followed by exactly one /to value.
+____________________________________________________________
+OOPS!!! Signal problem: An event needs exactly one /from followed by exactly one /to value.
+____________________________________________________________
+OOPS!!! Signal problem: An event needs exactly one /from followed by exactly one /to value.
+____________________________________________________________
+Here is your task itinerary:
+1.[T][ ] keep this
+____________________________________________________________
+End of the line for now. Safe travels!
+____________________________________________________________
+```
+
 ## Test case: Level 4 task types
 
 Aim: Verify task parsing, formatted deadline dates and times, task counts, marking, listing, and exit.

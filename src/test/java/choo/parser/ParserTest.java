@@ -39,6 +39,11 @@ public class ParserTest {
         ParsedCommand deadlineCommand = Parser.parse("deadline submit /by 2019-12-02 1800");
         assertEquals("[D][ ] submit (by: Dec 2 2019, 6:00PM)",
                 deadlineCommand.getTask().toString());
+
+        ParsedCommand delimiterLikeTextCommand = Parser.parse(
+                "deadline review /bypass route /by 2019-12-02");
+        assertEquals("[D][ ] review /bypass route (by: Dec 2 2019)",
+                delimiterLikeTextCommand.getTask().toString());
     }
 
     @Test
@@ -57,13 +62,27 @@ public class ParserTest {
 
     @Test
     void parse_invalidCommands_throwsSpecificErrors() {
+        assertError(null, "A command cannot be empty.");
+        assertError("", "A command cannot be empty.");
+        assertError("   ", "A command cannot be empty.");
+        assertError("list now", "The list command does not accept extra details.");
+        assertError("sort later", "The sort command does not accept extra details.");
+        assertError("bye please", "The bye command does not accept extra details.");
         assertError("mark two", "Enter a whole-number task position after mark.");
         assertError("todo", "A todo needs a description.");
         assertError("deadline report", "A deadline needs a /by date or time.");
         assertError("deadline /by 2019-12-02", "A deadline needs a description.");
+        assertError("deadline report /by 2019-12-02 /by 2019-12-03",
+                "A deadline needs exactly one /by value.");
         assertError("deadline report /by Friday",
                 "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
         assertError("event meeting /from Mon", "An event needs both /from and /to values.");
+        assertError("event meeting /from Mon /from Tue /to Wed",
+                "An event needs exactly one /from followed by exactly one /to value.");
+        assertError("event meeting /from Mon /to Tue /to Wed",
+                "An event needs exactly one /from followed by exactly one /to value.");
+        assertError("event meeting /to Tue /from Mon",
+                "An event needs exactly one /from followed by exactly one /to value.");
         assertError("find", "A find command needs a keyword.");
         assertError("mystery", "I don't recognize that command.");
     }
