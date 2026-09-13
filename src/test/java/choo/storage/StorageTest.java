@@ -34,6 +34,15 @@ public class StorageTest {
     }
 
     @Test
+    void load_directoryInsteadOfFile_throwsReadableError() {
+        Storage storage = new Storage(testDirectory);
+
+        ChooException exception = assertThrows(ChooException.class, storage::load);
+
+        assertEquals("I couldn't read the task data file.", exception.getMessage());
+    }
+
+    @Test
     void saveAndLoad_allTaskTypes_preservesTheirData() throws ChooException, IOException {
         Path dataFile = testDirectory.resolve("missing").resolve("folder").resolve("choo.txt");
         Storage storage = new Storage(dataFile);
@@ -102,7 +111,10 @@ public class StorageTest {
         String[] corruptedLines = {
             "D | 2 | report | 2019-12-02\n",
             "T | 0 | \n",
-            "T | 0 | bad\\q\n"
+            "T | 0 | bad\\q\n",
+            "T | 0 | trailing\\\n",
+            "Q | 0 | unknown\n",
+            "T | 0 | task | extra\n"
         };
 
         for (String data : corruptedLines) {

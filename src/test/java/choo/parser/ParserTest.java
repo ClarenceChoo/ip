@@ -70,13 +70,18 @@ public class ParserTest {
         assertError("bye please", "The bye command does not accept extra details.");
         assertError("mark two", "Enter a whole-number task position after mark.");
         assertError("todo", "A todo needs a description.");
+        assertError("deadline", "A deadline needs a description.");
         assertError("deadline report", "A deadline needs a /by date or time.");
         assertError("deadline /by 2019-12-02", "A deadline needs a description.");
+        assertError("deadline report /by", "A deadline needs a /by date or time.");
         assertError("deadline report /by 2019-12-02 /by 2019-12-03",
                 "A deadline needs exactly one /by value.");
         assertError("deadline report /by Friday",
                 "Use yyyy-MM-dd or yyyy-MM-dd HHmm for a deadline date.");
         assertError("event meeting /from Mon", "An event needs both /from and /to values.");
+        assertError("event", "An event needs a description.");
+        assertError("event meeting /from /to Tue", "An event needs both /from and /to values.");
+        assertError("event meeting /from Mon /to", "An event needs both /from and /to values.");
         assertError("event meeting /from Mon /from Tue /to Wed",
                 "An event needs exactly one /from followed by exactly one /to value.");
         assertError("event meeting /from Mon /to Tue /to Wed",

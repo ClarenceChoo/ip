@@ -1,6 +1,8 @@
 package choo.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,6 +55,39 @@ public class UiTest {
                 + "OOPS!!! Signal problem: bad command" + lineSeparator
                 + separator
                 + "End of the line for now. Safe travels!" + lineSeparator
+                + separator;
+        assertEquals(expected, output.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void showTaskChanges_formatsEveryChangeAndInputState() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Ui ui = new Ui(
+                new ByteArrayInputStream("only command\n".getBytes(StandardCharsets.UTF_8)),
+                new PrintStream(output, true, StandardCharsets.UTF_8));
+        Todo task = new Todo("read book");
+
+        assertTrue(ui.hasNextCommand());
+        assertEquals("only command", ui.readCommand());
+        assertFalse(ui.hasNextCommand());
+
+        ui.showAddedTask(task, 1);
+        task.markAsDone();
+        ui.showTaskStatusChanged(task, true);
+        ui.showDeletedTask(task, 0);
+
+        String lineSeparator = System.lineSeparator();
+        String separator = "____________________________________________________________" + lineSeparator;
+        String expected = "Ticket issued. I've added this task:" + lineSeparator
+                + "  [T][ ] read book" + lineSeparator
+                + "Your itinerary now has 1 task." + lineSeparator
+                + separator
+                + "On track! I've marked this task as done:" + lineSeparator
+                + "  [T][X] read book" + lineSeparator
+                + separator
+                + "Route updated. I've removed this task:" + lineSeparator
+                + "  [T][X] read book" + lineSeparator
+                + "Your itinerary now has 0 tasks." + lineSeparator
                 + separator;
         assertEquals(expected, output.toString(StandardCharsets.UTF_8));
     }
