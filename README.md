@@ -3,6 +3,9 @@
 CHOO is a JavaFX chatbot for managing todos, deadlines, and events through
 short text commands.
 
+Read the [CHOO User Guide](https://clarencechoo.github.io/ip/) for setup,
+commands, and troubleshooting.
+
 ## Setting up in Intellij
 
 Prerequisites: JDK 25, update Intellij to the most recent version.
