@@ -53,10 +53,21 @@ run:
 java -jar "choo.jar"
 ```
 
+The JAR bundles JavaFX for Windows and Linux on x64, and for both Intel and
+Apple Silicon Macs. The build combines the two macOS native libraries into
+universal binaries; no separate JavaFX installation or macOS build tool is
+needed. Java 25 is still required.
+
+`./gradlew check` also inspects the finished JAR with `verifyReleaseJar`.
+This check verifies the launcher, essential resources, and both macOS
+architectures. Before releasing, also launch the JAR using a Java 25 runtime
+without JavaFX: a JDK that includes JavaFX can conceal missing bundled
+libraries. Test commands, error feedback, and saving/reloading in the GUI.
+
 CHOO creates its `data/choo.txt` storage file relative to that folder. The
 generated JAR and `build/` directory are ignored by Git and must not be
 committed. To distribute CHOO, create a GitHub release with an appropriate
-version such as `v0.1` and attach `build/libs/choo.jar` as the release asset.
+version such as `v0.2` and attach only `build/libs/choo.jar` as the release asset.
 
 ## Acknowledgements
 

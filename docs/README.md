@@ -25,6 +25,9 @@ your work. All aboard!
 3. Put the JAR in a folder where you can save files, then open a terminal in that folder.
 4. Run `java -jar "choo.jar"` to open CHOO.
 
+The JAR includes JavaFX for Windows/Linux x64 and Intel/Apple Silicon macOS.
+You do not need to install JavaFX separately.
+
 The CHOO window opens with a welcome message. Enter these commands one at a time:
 
 1. `todo Read lecture notes` — CHOO confirms that it added the task.
