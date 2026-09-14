@@ -4,6 +4,17 @@ CHOO is a calm task conductor that keeps your work on track. Its railway
 stationmaster personality uses short, clear phrases while helping you manage
 tasks.
 
+## Getting started
+
+1. Install Java 25.
+2. Download `choo.jar` from the [CHOO releases page](https://github.com/ClarenceChoo/ip/releases).
+3. Put the JAR in a folder where you can save files, then open a terminal in that folder.
+4. Run `java -jar "choo.jar"` to open CHOO.
+
+Try `todo Read lecture notes`, then `list` to see your first task.
+Commands are lowercase. Replace uppercase placeholders such as `DESCRIPTION`
+with your own text; do not type the placeholder names.
+
 Enter one command at a time in the text field, then press Enter or click
 **Send**. Enter `bye` or close the window when you want to exit.
 
@@ -56,7 +67,8 @@ Use `event DESCRIPTION /from START /to END` for a task with a start and end.
 
 Example: `event project meeting /from Monday 2pm /to 4pm`
 
-The start and end values are stored exactly as entered.
+The start and end values are free-form text. CHOO does not check their
+chronological order or include events in deadline sorting.
 
 ## Listing tasks
 
@@ -123,12 +135,29 @@ CHOO explains invalid commands and missing task details without changing your
 existing task list. It also reports unreadable or corrupted task data instead
 of crashing. Correct the command or data-file problem and try again.
 
-Blank commands are rejected. The `list`, `sort`, and `bye` commands do not
+An empty submission in the GUI is ignored; the console reports an error.
+The `list`, `sort`, and `bye` commands do not
 accept extra details. A deadline must contain exactly one standalone `/by`
 delimiter. An event must contain exactly one standalone `/from` delimiter,
 followed by exactly one standalone `/to` delimiter.
+
+If your list unexpectedly appears empty, check that you launched CHOO from
+the same folder as before: it reads `data/choo.txt` relative to that folder.
+A missing file starts a new empty list. To recover existing tasks, close
+CHOO and restore your backed-up file before restarting.
+
+If reading or saving fails, check that the folder is writable and
+`data/choo.txt` is a file, not a directory. A failed save leaves the task list
+unchanged. For corrupted data, back up the file before correcting the
+reported line, then restart CHOO.
 
 ## Exiting CHOO
 
 Use `bye` to close the window. You can also use the window's normal close
 button.
+
+## Credits
+
+The profile avatars were generated with OpenAI's GPT Image model.
+See the project's [acknowledgements](https://github.com/ClarenceChoo/ip#acknowledgements)
+for its course foundations, tools, and AI assistance.
