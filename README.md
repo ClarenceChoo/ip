@@ -54,3 +54,15 @@ CHOO creates its `data/choo.txt` storage file relative to that folder. The
 generated JAR and `build/` directory are ignored by Git and must not be
 committed. To distribute CHOO, create a GitHub release with an appropriate
 version such as `v0.1` and attach `build/libs/choo.jar` as the release asset.
+
+## Acknowledgements
+
+- This project builds on the NUS CS2103/T Project Duke course materials and
+  Gradle support branch.
+- The GUI uses [OpenJFX](https://openjfx.io/). The project also uses JUnit,
+  Checkstyle, JaCoCo, and the Gradle Shadow plugin for testing and builds.
+- OpenAI Codex was used extensively as a coding collaborator for planning,
+  implementation, refactoring, testing, documentation, and Git workflows.
+  The generated work was reviewed and tested before inclusion.
+- `ChooAvatar.png` and `UserAvatar.png` were generated specifically for this
+  project using OpenAI's GPT Image model.
