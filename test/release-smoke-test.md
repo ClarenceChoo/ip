@@ -37,7 +37,9 @@ After restart, the final task list was:
 3.[E][ ] Team project meeting (from: Friday 2pm to: 4pm)
 ```
 
-`docs/Ui.png` captures this complete GUI window, including the title bar.
+`docs/Ui.png` was refreshed on September 15 using a separate sample list of
+nine realistic tasks in a 640-by-600-point window. All task entries fit on
+one line, and the capture includes the complete GUI and title bar.
 It is an actual screen capture, not a mockup or edited rendering.
 
 ## Automated checks and limitations
