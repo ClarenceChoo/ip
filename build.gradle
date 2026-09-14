@@ -28,9 +28,10 @@ repositories {
     mavenCentral()
 }
 
+ext.javaFxVersion = '17.0.7'
+
 dependencies {
     String jUnitVersion = '5.14.4'
-    String javaFxVersion = '17.0.7'
 
     implementation "org.openjfx:javafx-base:${javaFxVersion}:win"
     implementation "org.openjfx:javafx-base:${javaFxVersion}:mac"
@@ -115,3 +116,6 @@ shadowJar {
 run {
     standardInput = System.in
 }
+
+apply from: 'gradle/mac-natives.gradle'
+apply from: 'gradle/verify-release.gradle'
