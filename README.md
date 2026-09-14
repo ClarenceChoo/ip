@@ -63,6 +63,9 @@ This check verifies the launcher, essential resources, and both macOS
 architectures. Before releasing, also launch the JAR using a Java 25 runtime
 without JavaFX: a JDK that includes JavaFX can conceal missing bundled
 libraries. Test commands, error feedback, and saving/reloading in the GUI.
+If creating a test runtime with `jlink`, include `java.se,jdk.unsupported`:
+JavaFX's renderer needs `jdk.unsupported`, even though JavaFX itself must
+remain outside the test runtime.
 
 CHOO creates its `data/choo.txt` storage file relative to that folder. The
 generated JAR and `build/` directory are ignored by Git and must not be

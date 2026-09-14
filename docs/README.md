@@ -4,6 +4,10 @@ CHOO helps you manage todos, deadlines, and events by typing short commands.
 This guide takes you from your first task to finding, sorting, and completing
 your work. All aboard!
 
+<img src="Ui.png" alt="The CHOO window showing a deadline, a completed todo, and an event" width="520">
+
+CHOO keeps your task itinerary and command replies in one resizable window.
+
 ## On this page
 
 - [Getting started](#getting-started)
